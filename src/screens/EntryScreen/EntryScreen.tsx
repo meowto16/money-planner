@@ -32,8 +32,11 @@ const EntryScreen: React.FC = () => {
     }
 
     return (
-        <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" flexDirection="column">
+        <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="start" flexDirection="column" pt={10}>
             <form autoComplete="off" onSubmit={handleSubmit}>
+                <Box mb={4} display="flex" alignItems="center" justifyContent="center">
+                    <img alt="Jewish" src="/icon-192x192.png" width={168} height={168} />
+                </Box>
                 <Box mb={4}>
                     <Typography variant="h4" component="h1">Сколько денег</Typography>
                 </Box>
