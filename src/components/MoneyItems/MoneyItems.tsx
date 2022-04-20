@@ -11,11 +11,15 @@ import {
 
 import {CostsItemId, Money, moneyActions, moneySelectors} from "../../store/money.slice";
 import AddMoneyItem from "./components/AddMoneyItem/AddMoneyItem";
-import {AccountCircle} from "@mui/icons-material";
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const MoneyItemName = styled(TextField)({
     '& .MuiInput-root:before, & .MuiInput-root:after': {
         borderBottom: 'none'
+    },
+    '& .MuiInputAdornment-root': {
+        paddingBottom: '4px'
     }
 })
 
@@ -40,13 +44,17 @@ const MoneyItems = () => {
         }))
     }
 
+    const handleDeleteItem = (id: CostsItemId) => {
+        dispatch(moneyActions.removeCostsItem(id))
+    }
+
     return (
         <Box>
             <Stack sx={{ width: '100%' }} spacing={2}>
                 <Box>
                     {!costs?.length && <Typography>Еще не добавлено ни одного расхода</Typography>}
                     {!!costs?.length && (
-                        <Stack sx={{ width: '100%' }} spacing={2}>
+                        <Stack sx={{ width: '100%' }} spacing={3}>
                             {costs.map(cost => (
                                 <Box width="100%" key={cost.id}>
                                     <Box width="100%" mb={1}>
@@ -63,7 +71,14 @@ const MoneyItems = () => {
                                             InputProps={{
                                                 startAdornment: (
                                                     <InputAdornment position="start">
-                                                        <AccountCircle />
+                                                        <ArrowCircleRightIcon />
+                                                    </InputAdornment>
+                                                ),
+                                                endAdornment: (
+                                                    <InputAdornment
+                                                        onClick={() => handleDeleteItem(cost.id)}
+                                                        position="end">
+                                                        <DeleteIcon color="error" />
                                                     </InputAdornment>
                                                 )
                                             }}
