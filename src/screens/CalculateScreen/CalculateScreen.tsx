@@ -6,6 +6,7 @@ import { moneyActions } from "../../store/money.slice";
 import {Box, Button, Container, Stack, Typography} from "@mui/material";
 import MoneyTotal from "../../components/MoneyTotal/MoneyTotal";
 import MoneyItems from "../../components/MoneyItems/MoneyItems";
+import SortMoneyItemsButton from "../../components/MoneyItems/components/SortMoneyItemsButton/SortMoneyItemsButton";
 
 const CalculateScreen = () => {
     const dispatch = useDispatch()
@@ -23,6 +24,9 @@ const CalculateScreen = () => {
                 </Box>
                 <Box>
                     <MoneyTotal />
+                </Box>
+                <Box>
+                    <SortMoneyItemsButton />
                 </Box>
                 <Box>
                     <MoneyItems />

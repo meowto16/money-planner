@@ -58,7 +58,22 @@ const money = createSlice({
             if (typeof action.payload.amount === 'number') {
                 item.amount = action.payload.amount
             }
-        }
+        },
+        sortItems: (state, action: PayloadAction<'byName' | 'byAmount'>) => {
+            const type = action.payload
+
+            const byAmount = (a: CostsItem, b: CostsItem) => a.amount - b.amount
+            const byName = (a: CostsItem, b: CostsItem) => a.name.localeCompare(b.name)
+
+            switch (type) {
+                case "byAmount":
+                    state.costs = state.costs.sort((a, b) => byAmount(a, b) || byName(a, b))
+                    break
+                case "byName":
+                    state.costs = state.costs.sort((a, b) => byName(a, b) || byAmount(a, b))
+                    break
+            }
+        },
     },
 })
 
