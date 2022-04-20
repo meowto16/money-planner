@@ -1,15 +1,24 @@
-import {combineReducers, createStore} from "@reduxjs/toolkit";
+import { createStore } from 'redux'
+import { persistStore, persistReducer } from 'redux-persist'
+import {combineReducers} from "@reduxjs/toolkit";
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
-import { moneyReducer, MoneyState } from "./money.slice";
+import {moneyReducer, MoneyState} from "./money.slice";
 
 export type StoreState = {
     money: MoneyState
 }
 
-const reducer = combineReducers({
+const rootReducer = combineReducers({
     money: moneyReducer,
 })
 
-const store = createStore(reducer)
+const persistConfig = {
+    key: 'root',
+    storage,
+}
 
-export default store
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = createStore(persistedReducer)
+export const persistor = persistStore(store)
