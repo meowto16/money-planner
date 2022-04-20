@@ -9,7 +9,7 @@ const MoneyTotal = () => {
 
     return (
         <Alert severity={totalMoneyCalculated < 0 ? 'error' : 'info'} icon={false}>
-            Остается денег: {totalMoneyCalculated ? `${totalMoneyCalculated} руб.` : 'Не указано'}
+            Остается денег: {typeof totalMoneyCalculated === 'number' ? `${totalMoneyCalculated} руб.` : 'Не указано'}
         </Alert>
     )
 }
