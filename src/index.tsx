@@ -8,6 +8,8 @@ import { store, persistor } from "./store/store";
 
 import PersistLoader from "./components/PersistLoader/PersistLoader";
 
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -23,3 +25,5 @@ root.render(
       </Provider>
   </React.StrictMode>
 );
+
+serviceWorkerRegistration.register();
