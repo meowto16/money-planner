@@ -15,11 +15,13 @@ export type CostsItemPayload = Omit<CostsItem, 'id'>
 export interface MoneyState {
     total: Money | null
     costs: CostsItem[]
+    sortedBy: 'BY_NAME_ASC' | 'BY_NAME_DESC' | 'BY_AMOUNT_ASC' | 'BY_AMOUNT_DESC' | null
 }
 
 const initialState = {
     total: null,
     costs: [],
+    sortedBy: null,
 } as MoneyState
 
 const money = createSlice({
@@ -46,6 +48,10 @@ const money = createSlice({
         },
         removeCostsItem: (state, action: PayloadAction<CostsItemId>) => {
             state.costs = state.costs.filter(cost => cost.id !== action.payload)
+
+            if (state.costs.length === 0) {
+                state.sortedBy = null
+            }
         },
         changeCostsItem: (state, action: PayloadAction<Partial<CostsItemPayload> & { id: CostsItemId }>) => {
             const item = state.costs.find(cost => cost.id === action.payload.id)
@@ -61,17 +67,36 @@ const money = createSlice({
         },
         sortItems: (state, action: PayloadAction<'byName' | 'byAmount'>) => {
             const type = action.payload
+            const currentSort = state.sortedBy
 
             const byAmount = (a: CostsItem, b: CostsItem) => a.amount - b.amount
             const byName = (a: CostsItem, b: CostsItem) => a.name.localeCompare(b.name)
 
             switch (type) {
-                case "byAmount":
-                    state.costs = state.costs.sort((a, b) => byAmount(a, b) || byName(a, b))
+                case "byAmount": {
+                    const sort = currentSort === 'BY_AMOUNT_ASC' ? 'BY_AMOUNT_DESC' : 'BY_AMOUNT_ASC'
+                    state.costs = state.costs.sort((a, b) => {
+                        const [first, second] = sort === 'BY_AMOUNT_ASC'
+                            ? [a, b]
+                            : [b, a]
+
+                        return byAmount(first, second) || byName(first, second)
+                    })
+                    state.sortedBy = sort
                     break
-                case "byName":
-                    state.costs = state.costs.sort((a, b) => byName(a, b) || byAmount(a, b))
+                }
+                case "byName": {
+                    const sort = currentSort === 'BY_NAME_ASC' ? 'BY_NAME_DESC' : 'BY_NAME_ASC'
+                    state.costs = state.costs.sort((a, b) => {
+                        const [first, second] = sort === 'BY_NAME_ASC'
+                            ? [a, b]
+                            : [b, a]
+
+                        return byName(first, second) || byAmount(first, second)
+                    })
+                    state.sortedBy = sort
                     break
+                }
             }
         },
     },
@@ -82,6 +107,7 @@ const getTotalMoney = createSelector(getRoot, root => root.total)
 const getCosts = createSelector(getRoot, root => root.costs)
 const getCostsSum = createSelector(getCosts, costs => costs.reduce((acc, cost) => acc += cost.amount, 0))
 const getTotalMoneyCalculated = createSelector(getTotalMoney, getCostsSum, (total, costsSum) => (total || 0) - costsSum)
+const getSortedBy = createSelector(getRoot, root => root.sortedBy)
 
 export default money
 
@@ -93,6 +119,7 @@ const moneySelectors = {
     getCosts,
     getCostsSum,
     getTotalMoneyCalculated,
+    getSortedBy
 }
 
 export {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,11 +9,13 @@ import SortIcon from '@mui/icons-material/Sort';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
 import CurrencyRubleIcon from "@mui/icons-material/CurrencyRuble";
 
-import {moneyActions} from "../../../../store/money.slice";
+import {moneyActions, moneySelectors} from "../../../../store/money.slice";
 
 const SortMoneyItemsButton: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const dispatch = useDispatch()
+
+    const sortedBy = useSelector(moneySelectors.getSortedBy)
 
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -58,13 +60,21 @@ const SortMoneyItemsButton: React.FC = () => {
                     <ListItemIcon>
                         <SortByAlphaIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>По названию</ListItemText>
+                    <ListItemText
+                        primary="По названию"
+                        {...(sortedBy === 'BY_NAME_ASC' && { secondary: "(по возрастанию)" })}
+                        {...(sortedBy === 'BY_NAME_DESC' && { secondary: "(по убыванию)" })}
+                    />
                 </MenuItem>
                 <MenuItem onClick={handleSortByAmount}>
                     <ListItemIcon>
                         <CurrencyRubleIcon fontSize="small" />
                     </ListItemIcon>
-                    <ListItemText>По цене</ListItemText>
+                    <ListItemText
+                        primary="По цене"
+                        {...(sortedBy === 'BY_AMOUNT_ASC' && { secondary: "(по возрастанию)" })}
+                        {...(sortedBy === 'BY_AMOUNT_DESC' && { secondary: "(по убыванию)" })}
+                    />
                 </MenuItem>
             </Menu>
         </div>
