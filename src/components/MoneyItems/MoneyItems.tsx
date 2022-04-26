@@ -55,7 +55,7 @@ const MoneyItems = () => {
         <Box>
             <Stack sx={{ width: '100%' }} spacing={2}>
                 <Box>
-                    {!costs?.length && <Typography>Еще не добавлено ни одного расхода</Typography>}
+                    {!costs?.length && <Typography>Еще не распланировано ни одного расхода</Typography>}
                     {!!costs?.length && (
                         <Stack sx={{ width: '100%' }} spacing={3}>
                             {costs.map(cost => (

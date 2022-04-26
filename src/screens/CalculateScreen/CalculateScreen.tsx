@@ -1,7 +1,7 @@
 import React from 'react'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-import { moneyActions } from "../../store/money.slice";
+import { moneyActions, moneySelectors } from "../../store/money.slice";
 
 import {Box, Button, Container, Stack, Typography} from "@mui/material";
 import MoneyTotal from "../../components/MoneyTotal/MoneyTotal";
@@ -10,6 +10,8 @@ import SortMoneyItemsButton from "../../components/MoneyItems/components/SortMon
 
 const CalculateScreen = () => {
     const dispatch = useDispatch()
+
+    const isCostsEmpty = useSelector(moneySelectors.isCostsEmpty)
 
     const handleResetTotalMoney: React.MouseEventHandler = () => {
         dispatch(moneyActions.resetToInitialState())
@@ -25,9 +27,11 @@ const CalculateScreen = () => {
                 <Box>
                     <MoneyTotal />
                 </Box>
-                <Box>
-                    <SortMoneyItemsButton />
-                </Box>
+                {!isCostsEmpty && (
+                    <Box>
+                        <SortMoneyItemsButton />
+                    </Box>
+                )}
                 <Box>
                     <MoneyItems />
                 </Box>

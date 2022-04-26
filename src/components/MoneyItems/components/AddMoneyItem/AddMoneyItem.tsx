@@ -12,7 +12,7 @@ const AddMoneyItem: React.FC = () => {
     }, [])
 
     return (
-        <Button variant="contained" onClick={handleClick}>Добавить</Button>
+        <Button variant="contained" onClick={handleClick}>Добавить расход</Button>
     )
 }
 

@@ -108,6 +108,7 @@ const getCosts = createSelector(getRoot, root => root.costs)
 const getCostsSum = createSelector(getCosts, costs => costs.reduce((acc, cost) => acc += cost.amount, 0))
 const getTotalMoneyCalculated = createSelector(getTotalMoney, getCostsSum, (total, costsSum) => (total || 0) - costsSum)
 const getSortedBy = createSelector(getRoot, root => root.sortedBy)
+const isCostsEmpty = createSelector(getCosts, costs => costs.length === 0)
 
 export default money
 
@@ -119,7 +120,8 @@ const moneySelectors = {
     getCosts,
     getCostsSum,
     getTotalMoneyCalculated,
-    getSortedBy
+    getSortedBy,
+    isCostsEmpty
 }
 
 export {
