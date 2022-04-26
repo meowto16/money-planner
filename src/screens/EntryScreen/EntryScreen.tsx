@@ -4,7 +4,7 @@ import {Box, Button, InputAdornment, TextField, Typography} from "@mui/material"
 import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble';
 
 import { moneyActions } from '../../store/money.slice'
-
+import numberFormat from '../../utils/numberFormat';
 
 const MAX_INPUT_LENGTH = 12
 
@@ -42,12 +42,12 @@ const EntryScreen: React.FC = () => {
                 </Box>
                 <Box width="100%" mb={4}>
                     <TextField
-                        value={money}
+                        value={money === '' ? '' : numberFormat.format(+money)}
                         onChange={handleMoneyChange}
                         variant="standard"
                         placeholder="Введите число"
                         fullWidth
-                        inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                        inputProps={{ inputMode: 'numeric' }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">

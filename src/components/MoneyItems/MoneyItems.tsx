@@ -13,13 +13,16 @@ import {CostsItemId, Money, moneyActions, moneySelectors} from "../../store/mone
 import AddMoneyItem from "./components/AddMoneyItem/AddMoneyItem";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble';
+
+import numberFormat from '../../utils/numberFormat';
 
 const MoneyItemName = styled(TextField)({
     '& .MuiInput-root:before, & .MuiInput-root:after': {
         borderBottom: 'none'
     },
     '& .MuiInputAdornment-root': {
-        paddingBottom: '4px'
+        paddingBottom: '4px',
     }
 })
 
@@ -56,7 +59,7 @@ const MoneyItems = () => {
                     {!!costs?.length && (
                         <Stack sx={{ width: '100%' }} spacing={3}>
                             {costs.map(cost => (
-                                <Box width="100%" key={cost.id}>
+                                <Box width="100%" key={cost.id} border="1px solid #eee" borderRadius="3px" p={2}>
                                     <Box width="100%" mb={1}>
                                         <MoneyItemName
                                             onChange={(e) => {
@@ -88,15 +91,21 @@ const MoneyItems = () => {
                                     </Box>
                                     <Box width="100%">
                                         <TextField
-                                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <CurrencyRubleIcon />
+                                                    </InputAdornment>)
+                                            }}
+                                            inputProps={{ inputMode: 'numeric' }}
                                             onChange={(e) => {
                                                 handleChangeItemAmount({
                                                     id: cost.id,
                                                     amount: +e.target.value.replace(/[^0-9]/g, '')
                                                 })
                                             }}
-                                            value={cost.amount}
-                                            variant="outlined"
+                                            value={cost.amount === 0 ? '' : numberFormat.format(cost.amount)}
+                                            variant="standard"
                                             size="small"
                                             fullWidth
                                         />
