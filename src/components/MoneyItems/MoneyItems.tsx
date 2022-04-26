@@ -88,6 +88,7 @@ const MoneyItems = () => {
                                     </Box>
                                     <Box width="100%">
                                         <TextField
+                                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                                             onChange={(e) => {
                                                 handleChangeItemAmount({
                                                     id: cost.id,
