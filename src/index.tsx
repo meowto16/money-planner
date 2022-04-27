@@ -11,6 +11,8 @@ import PersistLoader from "./components/PersistLoader/PersistLoader";
 
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
+import './index.css'
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

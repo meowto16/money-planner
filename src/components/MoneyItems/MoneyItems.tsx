@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble';
 
 import numberFormat from '../../utils/numberFormat';
+import { MAX_INPUT_MONEY_LENGTH } from '../../config';
 
 const MoneyItemName = styled(TextField)({
     '& .MuiInput-root:before, & .MuiInput-root:after': {
@@ -40,6 +41,7 @@ const MoneyItems = () => {
     const handleChangeItemAmount = ({ id, amount }: { id: CostsItemId, amount: Money }) => {
         if (typeof amount !== 'number') return
         if (amount < 0) return
+        if (amount.toString().length >= MAX_INPUT_MONEY_LENGTH) return
 
         dispatch(moneyActions.changeCostsItem({
             id,
