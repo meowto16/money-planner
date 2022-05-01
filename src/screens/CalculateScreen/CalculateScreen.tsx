@@ -25,7 +25,7 @@ const CalculateScreen = () => {
   }
 
   return (
-    <Box>
+    <Box pb={4}>
       <AppBar position="static">
         <Container>
           <Box display="flex" alignItems="center" justifyContent="space-between" py={1} minHeight="56px">
