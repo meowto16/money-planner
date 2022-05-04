@@ -8,6 +8,7 @@ import MoneyTotal from '../../components/MoneyTotal/MoneyTotal'
 import MoneyItems from '../../components/MoneyItems/MoneyItems'
 import SortMoneyItemsButton from '../../components/MoneyItems/components/SortMoneyItemsButton/SortMoneyItemsButton'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
+import useConfirmDialog from '../../components/ConfirmDialog/useConfirmDialog'
 
 const ResetIconButton = styled(IconButton)({
   '&': {
@@ -17,12 +18,23 @@ const ResetIconButton = styled(IconButton)({
 
 const CalculateScreen = () => {
   const dispatch = useDispatch()
+  const { confirmDialog: resetConfirmDialog, openConfirmDialog } = useConfirmDialog({
+    title: 'Вы действительно хотите сбросить всё?',
+    onConfirm: () => dispatch(moneyActions.resetToInitialState()),
+    buttons: {
+      cancel: {
+        text: 'Нет'
+      },
+      confirm: {
+        text: 'Да, сбросить',
+        ButtonProps: {
+          color: 'warning'
+        }
+      },
+    }
+  })
 
   const isCostsEmpty = useSelector(moneySelectors.isCostsEmpty)
-
-  const handleResetTotalMoney: React.MouseEventHandler = () => {
-    dispatch(moneyActions.resetToInitialState())
-  }
 
   return (
     <Box pb={4}>
@@ -30,7 +42,7 @@ const CalculateScreen = () => {
         <Container>
           <Box display="flex" alignItems="center" justifyContent="space-between" py={1} minHeight="56px">
             <Typography variant="h5" component="h1">Расчет денег</Typography>
-            <ResetIconButton onClick={handleResetTotalMoney} color="default" title="Сбросить">
+            <ResetIconButton onClick={openConfirmDialog} color="default" title="Сбросить">
               <RestartAltIcon />
             </ResetIconButton>
           </Box>
@@ -51,6 +63,7 @@ const CalculateScreen = () => {
           </Box>
         </Stack>
       </Container>
+      {resetConfirmDialog}
     </Box>
   )
 }
