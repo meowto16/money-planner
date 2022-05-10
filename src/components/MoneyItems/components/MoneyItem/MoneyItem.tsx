@@ -59,6 +59,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
       </Box>
       <Box width="100%">
         <TextField
+          autoFocus
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
