@@ -1,20 +1,27 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { TransitionGroup } from 'react-transition-group'
 import {
-  Box,
+  Box, Collapse,
   Stack,
   Typography
 } from '@mui/material'
 
-import { CostsItemId, Money, moneyActions, moneySelectors } from '../../store/money.slice'
 import AddMoneyItem from './components/AddMoneyItem/AddMoneyItem'
 import MoneyItem from './components/MoneyItem/MoneyItem'
 
 import { MAX_INPUT_MONEY_LENGTH } from '../../config'
+import { CostsItemId, Money, moneyActions, moneySelectors } from '../../store/money.slice'
+import { StoreState } from '../../store/store'
+
+import * as S from './MoneyItems.styled'
 
 const MoneyItems = () => {
   const dispatch = useDispatch()
-  const costs = useSelector(moneySelectors.getCosts)
+  const { costs, isCostsEmpty } = useSelector((state: StoreState) => ({
+    costs: moneySelectors.getCosts(state),
+    isCostsEmpty: moneySelectors.isCostsEmpty(state),
+  }))
 
   const handleChangeItemName = ({ id, name }: { id: CostsItemId, name: string }) => {
     dispatch(moneyActions.changeCostsItem({
@@ -44,17 +51,17 @@ const MoneyItems = () => {
     dispatch(moneyActions.addCostsItem())
   }
 
+
   return (
-    <Box>
+    <S.MoneyItems>
       <Stack sx={{ width: '100%' }} spacing={3}>
         <Box>
-          {!costs?.length && <Typography>Еще не распланировано ни одного расхода</Typography>}
-          {!!costs?.length && (
-            <form onSubmit={handleSubmit}>
-              <Stack sx={{ width: '100%' }} spacing={2}>
-                {costs.map((cost, i) => (
+          {isCostsEmpty && <Typography>Еще не распланировано ни одного расхода</Typography>}
+          {!isCostsEmpty && <form onSubmit={handleSubmit}>
+            <TransitionGroup>
+              {costs.map((cost, i) => (
+                <Collapse key={cost.id} className="MoneyItem">
                   <MoneyItem
-                    key={cost.id}
                     id={cost.id}
                     placeholder={`Расход №${i + 1}`}
                     name={cost.name}
@@ -63,17 +70,17 @@ const MoneyItems = () => {
                     onChangeAmount={handleChangeItemAmount}
                     onDelete={handleDeleteItem}
                   />
-                ))}
-              </Stack>
-              <input type="submit" hidden />
-            </form>
-          )}
+                </Collapse>
+              ))}
+            </TransitionGroup>
+            <input type="submit" hidden />
+          </form>}
         </Box>
         <Box>
           <AddMoneyItem />
         </Box>
       </Stack>
-    </Box>
+    </S.MoneyItems>
   )
 }
 
