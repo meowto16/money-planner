@@ -40,6 +40,7 @@ const SortMoneyItemsButton: React.FC = () => {
         startIcon={<SortIcon />}
         color="primary"
         onClick={handleClick}
+        tabIndex={0}
       >
                 Отсортировать
       </Button>

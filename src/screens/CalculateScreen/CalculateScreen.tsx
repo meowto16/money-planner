@@ -42,7 +42,7 @@ const CalculateScreen = () => {
         <Container>
           <Box display="flex" alignItems="center" justifyContent="space-between" py={1} minHeight="56px">
             <Typography variant="h5" component="h1">Расчет денег</Typography>
-            <ResetIconButton onClick={openConfirmDialog} color="default" title="Сбросить">
+            <ResetIconButton onClick={openConfirmDialog} color="default" title="Сбросить" tabIndex={9999}>
               <RestartAltIcon />
             </ResetIconButton>
           </Box>
