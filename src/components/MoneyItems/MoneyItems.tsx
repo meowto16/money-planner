@@ -40,15 +40,16 @@ const MoneyItems = () => {
 
   return (
     <Box>
-      <Stack sx={{ width: '100%' }} spacing={2}>
+      <Stack sx={{ width: '100%' }} spacing={3}>
         <Box>
           {!costs?.length && <Typography>Еще не распланировано ни одного расхода</Typography>}
           {!!costs?.length && (
-            <Stack sx={{ width: '100%' }} spacing={3}>
-              {costs.map(cost => (
+            <Stack sx={{ width: '100%' }} spacing={2}>
+              {costs.map((cost, i) => (
                 <MoneyItem
                   key={cost.id}
                   id={cost.id}
+                  placeholder={`Расход №${i + 1}`}
                   name={cost.name}
                   amount={cost.amount}
                   onChangeName={handleChangeItemName}
