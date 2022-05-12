@@ -38,26 +38,35 @@ const MoneyItems = () => {
     dispatch(moneyActions.removeCostsItem(id))
   }
 
+  const handleSubmit: React.FormEventHandler = (event) => {
+    event.preventDefault()
+
+    dispatch(moneyActions.addCostsItem())
+  }
+
   return (
     <Box>
       <Stack sx={{ width: '100%' }} spacing={3}>
         <Box>
           {!costs?.length && <Typography>Еще не распланировано ни одного расхода</Typography>}
           {!!costs?.length && (
-            <Stack sx={{ width: '100%' }} spacing={2}>
-              {costs.map((cost, i) => (
-                <MoneyItem
-                  key={cost.id}
-                  id={cost.id}
-                  placeholder={`Расход №${i + 1}`}
-                  name={cost.name}
-                  amount={cost.amount}
-                  onChangeName={handleChangeItemName}
-                  onChangeAmount={handleChangeItemAmount}
-                  onDelete={handleDeleteItem}
-                />
-              ))}
-            </Stack>
+            <form onSubmit={handleSubmit}>
+              <Stack sx={{ width: '100%' }} spacing={2}>
+                {costs.map((cost, i) => (
+                  <MoneyItem
+                    key={cost.id}
+                    id={cost.id}
+                    placeholder={`Расход №${i + 1}`}
+                    name={cost.name}
+                    amount={cost.amount}
+                    onChangeName={handleChangeItemName}
+                    onChangeAmount={handleChangeItemAmount}
+                    onDelete={handleDeleteItem}
+                  />
+                ))}
+              </Stack>
+              <input type="submit" hidden />
+            </form>
           )}
         </Box>
         <Box>
