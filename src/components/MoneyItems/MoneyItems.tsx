@@ -18,10 +18,12 @@ import * as S from './MoneyItems.styled'
 
 const MoneyItems = () => {
   const dispatch = useDispatch()
-  const { costs, isCostsEmpty } = useSelector((state: StoreState) => ({
+  const { costs, isCostsEmpty, total } = useSelector((state: StoreState) => ({
     costs: moneySelectors.getCosts(state),
     isCostsEmpty: moneySelectors.isCostsEmpty(state),
+    total: moneySelectors.getTotalMoney(state),
   }))
+  const totalMoney = total || 1
 
   const handleChangeItemName = ({ id, name }: { id: CostsItemId, name: string }) => {
     dispatch(moneyActions.changeCostsItem({
@@ -38,6 +40,15 @@ const MoneyItems = () => {
     dispatch(moneyActions.changeCostsItem({
       id,
       amount,
+    }))
+  }
+
+  const handleChangePercent = ({ id, percent }: { id: CostsItemId, amount: Money, percent: number }) => {
+    const calculated = totalMoney * percent / 100
+
+    dispatch(moneyActions.changeCostsItem({
+      id,
+      amount: Math.round(calculated)
     }))
   }
 
@@ -66,8 +77,10 @@ const MoneyItems = () => {
                     placeholder={`Расход №${i + 1}`}
                     name={cost.name}
                     amount={cost.amount}
+                    percent={(cost.amount / totalMoney * 100)}
                     onChangeName={handleChangeItemName}
                     onChangeAmount={handleChangeItemAmount}
+                    onChangePercent={handleChangePercent}
                     onDelete={handleDeleteItem}
                   />
                 </Collapse>

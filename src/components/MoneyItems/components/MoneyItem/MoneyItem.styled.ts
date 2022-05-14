@@ -12,10 +12,55 @@ export const MoneyItem = styled(Box)({
 export const MoneyItemInputs = styled(Box)({
   width: '100%',
   display: 'flex',
-  padding: '12px 16px',
+  padding: '12px 16px 24px',
   justifyContent: 'space-between',
+  position: 'relative',
 })
 
+export const MoneyItemRange = styled(Box)({
+  position: 'absolute',
+  bottom: '-2px',
+  left: '-2px',
+  width: '100%',
+})
+
+export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
+  width: '100%',
+  display: 'block',
+  WebkitAppearance: 'none',
+  appearance: 'none',
+  outline: 'none',
+  background: '#eee',
+  height: '16px',
+  borderBottomLeftRadius: '3px',
+  borderBottomRightRadius: '0px',
+  borderTopLeftRadius: '0px',
+  borderTopRightRadius: '0px',
+
+  '&::-webkit-slider-thumb': {
+    WebkitAppearance: 'none',
+    appearance: 'none',
+    width: '20px',
+    height: '20px',
+    transition: 'width 0.15s ease-in, height 0.15s ease-in',
+    borderRadius: '50%',
+    background: theme.palette.primary.light,
+    cursor: 'pointer'
+  },
+  '&::-moz-range-thumb': {
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+    transition: 'width 0.15s ease-in, height 0.15s ease-in',
+    background: theme.palette.primary.light,
+    cursor: 'pointer'
+  },
+
+  '&:active::-webkit-slider-thumb': {
+    width: '26px',
+    height: '26px'
+  }
+}))
 
 export const MoneyItemActions = styled(Box)({
   minWidth: '60px',
@@ -45,6 +90,16 @@ export const MoneyItemCost = styled(TextField)({
     minWidth: '120px',
     maxWidth: '115px',
     width: '115px',
+  },
+  '& .MuiInput-root::before': {
+    content: 'attr(data-percent)',
+    transform: 'unset',
+    position: 'absolute',
+    color: '#bcbcbc',
+    top: '-16px',
+    left: 'unset',
+    right: '0',
+    fontSize: '0.6em',
   },
   '& .MuiInput-root::after': {
     content: '"руб."',

@@ -12,8 +12,10 @@ export interface MoneyItemProps {
     id: CostsItem['id']
     name: CostsItem['name']
     amount: CostsItem['amount']
+    percent: number
     onChangeName: (props: { id: CostsItem['id'], name: CostsItem['name'] }) => void
     onChangeAmount: (props: { id: CostsItem['id'], amount: CostsItem['amount'] }) => void
+    onChangePercent: (props: { id: CostsItem['id'], amount: CostsItem['amount'], percent: number }) => void
     onDelete: (id: CostsItem['id']) => void
 }
 
@@ -21,9 +23,11 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
   id,
   name,
   amount,
+  percent = 0,
   placeholder,
   onChangeName,
   onChangeAmount,
+  onChangePercent,
   onDelete
 }) => {
   return (
@@ -44,7 +48,14 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
         />
         <S.MoneyItemCost
           autoFocus
-          inputProps={{ inputMode: 'numeric' }}
+          inputProps={{ 
+            inputMode: 'numeric'
+          }}
+          InputProps={{
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            'data-percent': (Math.round(percent / 0.5) * 0.5) + '%'
+          }}
           placeholder="0"
           onChange={(e) => {
             onChangeAmount({
@@ -57,6 +68,17 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
           size="small"
           fullWidth
         />
+        <S.MoneyItemRange>
+          <S.MoneyItemRangeInput
+            type="range"
+            value={percent}
+            step={0.5} 
+            min={0} 
+            max={100}
+            onChange={(e) => onChangePercent({ id, amount, percent: +e.target.value })}
+            data-percent="0.5%"
+          />
+        </S.MoneyItemRange>
       </S.MoneyItemInputs>
       <S.MoneyItemActions>
         <S.MoneyItemDelete>
