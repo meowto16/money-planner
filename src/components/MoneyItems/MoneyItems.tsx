@@ -15,6 +15,7 @@ import { CostsItemId, Money, moneyActions, moneySelectors } from '../../store/mo
 import { StoreState } from '../../store/store'
 
 import * as S from './MoneyItems.styled'
+import { getPercentStep } from './constants'
 
 const MoneyItems = () => {
   const dispatch = useDispatch()
@@ -45,10 +46,11 @@ const MoneyItems = () => {
 
   const handleChangePercent = ({ id, percent }: { id: CostsItemId, amount: Money, percent: number }) => {
     const calculated = totalMoney * percent / 100
+    const step = getPercentStep(totalMoney)
 
     dispatch(moneyActions.changeCostsItem({
       id,
-      amount: Math.round(calculated)
+      amount: Math.round(calculated / step) * step
     }))
   }
 
