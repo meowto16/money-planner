@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react'
+import React, { memo } from 'react'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 
@@ -7,6 +7,7 @@ import numberFormat, { numberUnformat } from '../../../../utils/numberFormat'
 
 import * as S from './MoneyItem.styled'
 import HorizontalSwipe, { SwipeHandler } from '../../../Util/HorizontalSwipe'
+import { SWIPE_LEFT_MIN_DISTANCE, SWIPE_RIGHT_MIN_DISTANCE } from './constants'
 
 export interface MoneyItemProps {
     placeholder: string
@@ -20,9 +21,6 @@ export interface MoneyItemProps {
     onDelete: (id: CostsItem['id']) => void
 }
 
-const SWIPE_LEFT_MIN_DISTANCE = 40
-const SWIPE_RIGHT_MIN_DISTANCE = 40
-
 const MoneyItem: React.FC<MoneyItemProps> = ({
   id,
   name,
@@ -34,11 +32,13 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
   onChangePercent,
   onDelete
 }) => {
-  const [itemTranslateX, setItemTranslateX] = useState<number>(0)
-
   const handleSwipeLeft: SwipeHandler = (event, diff) => {
     const isSwipedEnough = Math.abs(diff) >= SWIPE_LEFT_MIN_DISTANCE
     console.log('swipe left', isSwipedEnough, diff)
+
+    if (isSwipedEnough) {
+      onDelete(id)
+    }
   }
 
   const handleSwipeRight: SwipeHandler = (event, diff) => {
@@ -48,74 +48,81 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
 
   const handleSwipeMove: SwipeHandler = (event, diff) => {
     console.log(diff)
-
-    // setItemTranslateX(diff)
   }
 
   return (
     <HorizontalSwipe onSwipeLeft={handleSwipeLeft} onSwipeRight={handleSwipeRight} onSwipeMove={handleSwipeMove}>
-      <S.MoneyItem
-        style={{
-          transform: `translateX(${-itemTranslateX}px)`
-        }}
-      >
-        <S.MoneyItemInputs>
-          <S.MoneyItemName
-            onChange={(e) => {
-              onChangeName({
-                id: id,
-                name: e.target.value
-              })
-            }}
-            value={name}
-            variant="standard"
-            placeholder={placeholder}
-            size="small"
-            fullWidth
-          />
-          <S.MoneyItemCost
-            autoFocus
-            inputProps={{
-              inputMode: 'numeric'
-            }}
-            InputProps={{
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              'data-percent': (Math.round(percent / 0.5) * 0.5) + '%'
-            }}
-            placeholder="0"
-            onChange={(e) => {
-              onChangeAmount({
-                id: id,
-                amount: numberUnformat(e.target.value)
-              })
-            }}
-            value={amount === 0 ? '' : `${numberFormat.format(amount)}`}
-            variant="standard"
-            size="small"
-            fullWidth
-          />
-          <S.MoneyItemRange>
-            <S.MoneyItemRangeInput
-              type="range"
-              value={percent}
-              step={0.5}
-              min={0}
-              max={100}
-              onTouchMove={e => e.stopPropagation()}
-              onChange={e => onChangePercent({ id, amount, percent: +e.target.value })}
-              data-percent="0.5%"
+      {({ handleTouchStart, handleTouchMove, handleTouchEnd, isSwiping, swipeDistance }) => (
+        <S.MoneyItem
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{
+            transform: `translateX(${-swipeDistance}px)`,
+            transition: !isSwiping ? '0.15s ease-in transform' : undefined,
+          }}
+        >
+          <S.MoneyItemInputs>
+            <S.MoneyItemName
+              onChange={(e) => {
+                onChangeName({
+                  id: id,
+                  name: e.target.value
+                })
+              }}
+              value={name}
+              variant="standard"
+              placeholder={placeholder}
+              size="small"
+              fullWidth
             />
-          </S.MoneyItemRange>
-        </S.MoneyItemInputs>
-        <S.MoneyItemActions>
-          <S.MoneyItemDelete>
-            <S.MoneyItemDeleteButton onClick={() => onDelete(id)}>
-              <DeleteIcon />
-            </S.MoneyItemDeleteButton>
-          </S.MoneyItemDelete>
-        </S.MoneyItemActions>
-      </S.MoneyItem>
+            <S.MoneyItemCost
+              autoFocus
+              inputProps={{
+                inputMode: 'numeric'
+              }}
+              InputProps={{
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                'data-percent': (Math.round(percent / 0.5) * 0.5) + '%'
+              }}
+              placeholder="0"
+              onChange={(e) => {
+                onChangeAmount({
+                  id: id,
+                  amount: numberUnformat(e.target.value)
+                })
+              }}
+              value={amount === 0 ? '' : `${numberFormat.format(amount)}`}
+              variant="standard"
+              size="small"
+              fullWidth
+            />
+            <S.MoneyItemRange>
+              <S.MoneyItemRangeInput
+                type="range"
+                value={percent}
+                step={0.5}
+                min={0}
+                max={100}
+                onTouchMove={e => e.stopPropagation()}
+                onChange={e => onChangePercent({ id, amount, percent: +e.target.value })}
+                data-percent="0.5%"
+              />
+            </S.MoneyItemRange>
+          </S.MoneyItemInputs>
+          <S.MoneyItemDeleteAction style={{
+            opacity: `${swipeDistance / SWIPE_LEFT_MIN_DISTANCE}`,
+            transition: !isSwiping ? '0.15s ease-in opacity' : undefined,
+          }}>
+            <S.MoneyItemDelete>
+              <S.MoneyItemDeleteButton onClick={() => onDelete(id)}>
+                <DeleteIcon />
+              </S.MoneyItemDeleteButton>
+            </S.MoneyItemDelete>
+          </S.MoneyItemDeleteAction>
+        </S.MoneyItem>
+      )}
     </HorizontalSwipe>
   )
 }

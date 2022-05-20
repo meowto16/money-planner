@@ -1,0 +1,2 @@
+export const SWIPE_LEFT_MIN_DISTANCE = 60
+export const SWIPE_RIGHT_MIN_DISTANCE = 60

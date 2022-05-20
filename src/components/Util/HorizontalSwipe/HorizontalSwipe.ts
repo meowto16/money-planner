@@ -2,11 +2,19 @@ import React, { useState } from 'react'
 
 export type SwipeHandler = (event: React.TouchEvent, diff: number) => void
 
+export type HorizontalSwipeChildren = (props: {
+  isSwiping: boolean
+  swipeDistance: number
+  handleTouchStart?: React.TouchEventHandler
+  handleTouchMove?: React.TouchEventHandler
+  handleTouchEnd?: React.TouchEventHandler
+}) => React.ReactElement
+
 export interface HorizontalSwipeProps {
     onSwipeLeft?: SwipeHandler
     onSwipeRight?: SwipeHandler
     onSwipeMove?: SwipeHandler
-    children: React.ReactElement
+    children: HorizontalSwipeChildren
 }
 
 const HorizontalSwipe: React.FC<HorizontalSwipeProps> = ({
@@ -15,10 +23,13 @@ const HorizontalSwipe: React.FC<HorizontalSwipeProps> = ({
   onSwipeMove,
   children
 }) => {
+  const [isSwiping, setIsSwiping] = useState<boolean>(false)
   const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [swipeDistance, setSwipeDistance] = useState<number>(0)
 
   const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
     setTouchStart(e.changedTouches[0].screenX)
+    setIsSwiping(true)
   }
 
   const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => {
@@ -30,6 +41,7 @@ const HorizontalSwipe: React.FC<HorizontalSwipeProps> = ({
     const diff = touchStart - touchEnd
 
     onSwipeMove?.(e, diff)
+    setSwipeDistance(diff)
   }
 
   const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = (e) => {
@@ -51,12 +63,16 @@ const HorizontalSwipe: React.FC<HorizontalSwipeProps> = ({
     }
 
     setTouchStart(null)
+    setIsSwiping(false)
+    setSwipeDistance(0)
   }
 
-  return React.cloneElement(children, {
-    onTouchStart: handleTouchStart,
-    onTouchMove: handleTouchMove,
-    onTouchEnd: handleTouchEnd,
+  return children({
+    isSwiping,
+    swipeDistance,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
   })
 }
 

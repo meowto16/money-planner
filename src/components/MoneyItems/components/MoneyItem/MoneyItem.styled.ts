@@ -1,4 +1,5 @@
 import { Box, TextField, IconButton, styled } from '@mui/material'
+import { SWIPE_LEFT_MIN_DISTANCE } from './constants'
 
 export const MoneyItem = styled(Box)({
   width: '100%',
@@ -62,8 +63,12 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
   }
 }))
 
-export const MoneyItemActions = styled(Box)({
-  minWidth: '60px',
+export const MoneyItemDeleteAction = styled(Box)({
+  position: 'absolute',
+  width: `${SWIPE_LEFT_MIN_DISTANCE}px`,
+  height: '65px',
+  right: `-${SWIPE_LEFT_MIN_DISTANCE}px`,
+  top: '0',
 })
 
 export const MoneyItemName = styled(TextField)({
