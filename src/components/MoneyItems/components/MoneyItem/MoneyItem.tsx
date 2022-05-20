@@ -58,7 +58,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           style={{
-            transform: `translateX(${-swipeDistance}px)`,
+            transform: `translate3d(${-swipeDistance}px, 0, 0)`,
             transition: !isSwiping ? '0.15s ease-in transform' : undefined,
           }}
         >

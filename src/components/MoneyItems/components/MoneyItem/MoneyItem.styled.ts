@@ -7,7 +7,8 @@ export const MoneyItem = styled(Box)({
   border: '1px solid #eee',
   borderRadius: '4px',
   boxShadow: '4px 3px 5px 1px #f0eded',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
+  willChange: 'transform',
 })
 
 export const MoneyItemInputs = styled(Box)({
@@ -69,6 +70,7 @@ export const MoneyItemDeleteAction = styled(Box)({
   height: '65px',
   right: `-${SWIPE_LEFT_MIN_DISTANCE}px`,
   top: '0',
+  willChange: 'opacity',
 })
 
 export const MoneyItemName = styled(TextField)({
