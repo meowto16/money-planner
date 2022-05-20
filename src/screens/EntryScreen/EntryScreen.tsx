@@ -4,7 +4,7 @@ import { Box, Button, InputAdornment, TextField, Typography, AppBar } from '@mui
 import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble'
 
 import { moneyActions } from '../../store/money.slice'
-import numberFormat from '../../utils/numberFormat'
+import numberFormat, { numberUnformat } from '../../utils/numberFormat'
 import { MAX_INPUT_MONEY_LENGTH } from '../../config'
 
 const EntryScreen: React.FC = () => {
@@ -20,7 +20,7 @@ const EntryScreen: React.FC = () => {
       setMoney('')
     }
 
-    setMoney(e.target.value.replace(/[^0-9]/g, ''))
+    setMoney(numberUnformat(e.target.value).toString())
   }, [])
 
   const handleSubmit: React.FormEventHandler = (e) => {

@@ -3,7 +3,7 @@ import React, { memo } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 import { CostsItem } from '../../../../store/money.slice'
-import numberFormat from '../../../../utils/numberFormat'
+import numberFormat, { numberUnformat } from '../../../../utils/numberFormat'
 
 import * as S from './MoneyItem.styled'
 
@@ -60,7 +60,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
           onChange={(e) => {
             onChangeAmount({
               id: id,
-              amount: +e.target.value.replace(/[^0-9]/g, '')
+              amount: numberUnformat(e.target.value)
             })
           }}
           value={amount === 0 ? '' : `${numberFormat.format(amount)}`}
