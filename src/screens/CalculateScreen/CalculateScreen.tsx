@@ -37,7 +37,7 @@ const CalculateScreen = () => {
   const isCostsEmpty = useSelector(moneySelectors.isCostsEmpty)
 
   return (
-    <Box pb={4}>
+    <Box pb={4} style={{ overflow: 'hidden' }}>
       <AppBar position="static">
         <Container>
           <Box display="flex" alignItems="center" justifyContent="space-between" py={1} minHeight="56px">
