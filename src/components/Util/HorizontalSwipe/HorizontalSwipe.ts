@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { SWIPE_BOTTOM_MIN_DISTANCE_RESTRICTION, SWIPE_TOP_MIN_DISTANCE_RESTRICTION } from './constants'
 
 export type SwipeHandler = (event: React.TouchEvent, diff: number) => void
 
@@ -24,45 +25,56 @@ const HorizontalSwipe: React.FC<HorizontalSwipeProps> = ({
   children
 }) => {
   const [isSwiping, setIsSwiping] = useState<boolean>(false)
-  const [touchStart, setTouchStart] = useState<number | null>(null)
+  const [touchStartX, setTouchStartX] = useState<number | null>(null)
+  const [touchStartY, setTouchStartY] = useState<number | null>(null)
   const [swipeDistance, setSwipeDistance] = useState<number>(0)
 
   const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    setTouchStart(e.changedTouches[0].screenX)
+    setTouchStartX(e.changedTouches[0].screenX)
+    setTouchStartY(e.changedTouches[0].screenY)
     setIsSwiping(true)
   }
 
   const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (touchStart === null) {
+    if (touchStartX === null) {
       return
     }
 
-    const touchEnd = e.changedTouches[0].screenX
-    const diff = touchStart - touchEnd
+    const touchEndX = e.changedTouches[0].screenX
+    const diffX = touchStartX - touchEndX
 
-    onSwipeMove?.(e, diff)
-    setSwipeDistance(diff)
+    onSwipeMove?.(e, diffX)
+    setSwipeDistance(diffX)
   }
 
   const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = (e) => {
-    if (touchStart === null) {
+    if (touchStartX === null || touchStartY === null) {
       return
     }
 
-    const touchEnd = e.changedTouches[0].screenX
-    const diff = touchStart - touchEnd
-    const isSwipeLeft = diff > 0
-    const isSwipeRight = diff < 0
+    const touchEndY = e.changedTouches[0].screenY
+    const diffY = touchStartY - touchEndY
+    const isSwipeVertical =
+        diffY >= SWIPE_TOP_MIN_DISTANCE_RESTRICTION
+        || diffY <= SWIPE_BOTTOM_MIN_DISTANCE_RESTRICTION
 
-    if (isSwipeLeft) {
-      onSwipeLeft?.(e, diff)
+    if (!isSwipeVertical) {
+      const touchEndX = e.changedTouches[0].screenX
+      const diffX = touchStartX - touchEndX
+      const isSwipeLeft = diffX > 0
+      const isSwipeRight = diffX < 0
+
+      if (isSwipeLeft) {
+        onSwipeLeft?.(e, diffX)
+      }
+
+      if (isSwipeRight) {
+        onSwipeRight?.(e, diffX)
+      }
     }
 
-    if (isSwipeRight) {
-      onSwipeRight?.(e, diff)
-    }
-
-    setTouchStart(null)
+    setTouchStartX(null)
+    setTouchStartY(null)
     setIsSwiping(false)
     setSwipeDistance(0)
   }
