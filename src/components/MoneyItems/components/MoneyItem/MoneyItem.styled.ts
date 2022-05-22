@@ -40,10 +40,13 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
   pointerEvents: 'none',
 
   '&::-webkit-slider-thumb': {
+    boxSizing: 'content-box',
+    backgroundClip: 'padding-box!important',
     WebkitAppearance: 'none',
     appearance: 'none',
-    width: '24px',
-    height: '24px',
+    width: '20px',
+    height: '20px',
+    border: '8px solid transparent',
     transition: 'width 0.15s ease-in, height 0.15s ease-in',
     borderRadius: '50%',
     background: theme.palette.primary.light,
@@ -51,8 +54,11 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
     pointerEvents: 'auto',
   },
   '&::-moz-range-thumb': {
-    width: '24px',
-    height: '24px',
+    boxSizing: 'content-box',
+    backgroundClip: 'padding-box!important',
+    width: '20px',
+    height: '20px',
+    border: '8px solid transparent',
     borderRadius: '50%',
     transition: 'width 0.15s ease-in, height 0.15s ease-in',
     background: theme.palette.primary.light,
@@ -61,8 +67,8 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
   },
 
   '&:active::-webkit-slider-thumb': {
-    width: '32px',
-    height: '32px'
+    width: '24px',
+    height: '24px',
   }
 }))
 
