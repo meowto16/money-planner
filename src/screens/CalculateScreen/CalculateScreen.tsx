@@ -49,7 +49,7 @@ const CalculateScreen = () => {
         </Container>
       </AppBar>
       <Container>
-        <Stack sx={{ width: '100%' }} py={3} spacing={4}>
+        <Stack sx={{ width: '100%' }} py={3} spacing={2}>
           <Box>
             <MoneyTotal />
           </Box>

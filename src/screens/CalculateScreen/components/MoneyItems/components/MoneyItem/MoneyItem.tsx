@@ -17,7 +17,7 @@ export interface MoneyItemProps {
     percent: number
     onChangeName: (props: { id: CostsItem['id'], name: CostsItem['name'] }) => void
     onChangeAmount: (props: { id: CostsItem['id'], amount: CostsItem['amount'] }) => void
-    onChangePercent: (props: { id: CostsItem['id'], amount: CostsItem['amount'], percent: number }) => void
+    onChangePercent?: (props: { id: CostsItem['id'], amount: CostsItem['amount'], percent: number }) => void
     onDelete: (id: CostsItem['id']) => void
 }
 
@@ -33,7 +33,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
   onDelete
 }) => {
   const handleSwipeLeft: SwipeHandler = (event, diff) => {
-    const isSwipedEnough = Math.abs(diff) >= SWIPE_LEFT_MIN_DISTANCE
+    const isSwipedEnough = diff >= SWIPE_LEFT_MIN_DISTANCE
     console.log('swipe left', isSwipedEnough, diff)
 
     if (isSwipedEnough) {
@@ -42,16 +42,14 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
   }
 
   const handleSwipeRight: SwipeHandler = (event, diff) => {
-    const isSwipedEnough = Math.abs(diff) >= SWIPE_RIGHT_MIN_DISTANCE
+    const isSwipedEnough = diff >= SWIPE_RIGHT_MIN_DISTANCE
     console.log('swipe right', isSwipedEnough, diff)
   }
 
-  const handleSwipeMove: SwipeHandler = (event, diff) => {
-    console.log(diff)
-  }
+  const haveRange = Boolean(onChangePercent)
 
   return (
-    <HorizontalSwipe onSwipeLeft={handleSwipeLeft} onSwipeRight={handleSwipeRight} onSwipeMove={handleSwipeMove}>
+    <HorizontalSwipe onSwipeLeft={handleSwipeLeft} onSwipeRight={handleSwipeRight}>
       {({ handleTouchStart, handleTouchMove, handleTouchEnd, isSwiping, swipeDistance }) => (
         <S.MoneyItem
           onTouchStart={handleTouchStart}
@@ -62,7 +60,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
             transition: !isSwiping ? '0.15s ease-in transform' : undefined,
           }}
         >
-          <S.MoneyItemInputs>
+          <S.MoneyItemInputs $haveRange={haveRange}>
             <S.MoneyItemName
               onChange={(e) => {
                 onChangeName({
@@ -98,20 +96,22 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
               size="small"
               fullWidth
             />
-            <S.MoneyItemRange>
-              <S.MoneyItemRangeInput
-                type="range"
-                value={percent}
-                step={0.5}
-                min={0}
-                max={100}
-                onTouchStart={e => e.stopPropagation()}
-                onTouchMove={e => e.stopPropagation()}
-                onTouchEnd={e => e.stopPropagation()}
-                onChange={e => onChangePercent({ id, amount, percent: +e.target.value })}
-                data-percent="0.5%"
-              />
-            </S.MoneyItemRange>
+            {haveRange && (
+              <S.MoneyItemRange>
+                <S.MoneyItemRangeInput
+                  type="range"
+                  value={percent}
+                  step={0.5}
+                  min={0}
+                  max={100}
+                  onTouchStart={e => e.stopPropagation()}
+                  onTouchMove={e => e.stopPropagation()}
+                  onTouchEnd={e => e.stopPropagation()}
+                  onChange={e => onChangePercent!({ id, amount, percent: +e.target.value })}
+                  data-percent="0.5%"
+                />
+              </S.MoneyItemRange>
+            )}
           </S.MoneyItemInputs>
           <S.MoneyItemDeleteAction style={{
             opacity: `${swipeDistance / SWIPE_LEFT_MIN_DISTANCE}`,
