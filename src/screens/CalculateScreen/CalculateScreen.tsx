@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { moneyActions, moneySelectors } from '../../store/money.slice'
 
 import { AppBar, Box, IconButton, Container, Stack, Typography, styled } from '@mui/material'
-import MoneyTotal from '../../components/MoneyTotal/MoneyTotal'
-import MoneyItems from '../../components/MoneyItems/MoneyItems'
-import SortMoneyItemsButton from '../../components/MoneyItems/components/SortMoneyItemsButton/SortMoneyItemsButton'
+import MoneyTotal from './components/MoneyTotal/MoneyTotal'
+import MoneyItems from './components/MoneyItems/MoneyItems'
+import SortMoneyItemsButton from './components/MoneyItems/components/SortMoneyItemsButton/SortMoneyItemsButton'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import useConfirmDialog from '../../components/ConfirmDialog/useConfirmDialog'
 
@@ -49,7 +49,7 @@ const CalculateScreen = () => {
         </Container>
       </AppBar>
       <Container>
-        <Stack sx={{ width: '100%' }} py={3} spacing={4}>
+        <Stack sx={{ width: '100%' }} py={3} spacing={2}>
           <Box>
             <MoneyTotal />
           </Box>

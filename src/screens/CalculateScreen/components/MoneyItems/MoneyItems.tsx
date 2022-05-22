@@ -1,26 +1,24 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { TransitionGroup } from 'react-transition-group'
-import {
-  Box, Collapse,
-  Stack,
-  Typography
-} from '@mui/material'
+import { Box, Collapse, Stack, Typography } from '@mui/material'
 
 import AddMoneyItem from './components/AddMoneyItem/AddMoneyItem'
 import MoneyItem from './components/MoneyItem/MoneyItem'
 
-import { MAX_INPUT_MONEY_LENGTH } from '../../config'
-import { CostsItemId, Money, moneyActions, moneySelectors } from '../../store/money.slice'
-import { StoreState } from '../../store/store'
+import { MAX_INPUT_MONEY_LENGTH } from '../../../../config'
+import { CostsItemId, EAppMoneyMode, Money, moneyActions, moneySelectors } from '../../../../store/money.slice'
+import { StoreState } from '../../../../store/store'
 
 import * as S from './MoneyItems.styled'
 import { getPercentStep } from './constants'
 
 const MoneyItems = () => {
   const dispatch = useDispatch()
-  const { costs, isCostsEmpty, total } = useSelector((state: StoreState) => ({
+  const { appMode, costs, costsSum, isCostsEmpty, total } = useSelector((state: StoreState) => ({
+    appMode: moneySelectors.getAppMode(state),
     costs: moneySelectors.getCosts(state),
+    costsSum: moneySelectors.getCostsSum(state),
     isCostsEmpty: moneySelectors.isCostsEmpty(state),
     total: moneySelectors.getTotalMoney(state),
   }))
@@ -79,10 +77,13 @@ const MoneyItems = () => {
                     placeholder={`Расход №${i + 1}`}
                     name={cost.name}
                     amount={cost.amount}
-                    percent={(cost.amount / totalMoney * 100)}
+                    percent={appMode === EAppMoneyMode.SALARY_MODE
+                      ? (cost.amount / totalMoney * 100)
+                      : (cost.amount / (costsSum || 1) * 100)
+                    }
                     onChangeName={handleChangeItemName}
                     onChangeAmount={handleChangeItemAmount}
-                    onChangePercent={handleChangePercent}
+                    onChangePercent={appMode === EAppMoneyMode.SALARY_MODE ? handleChangePercent : undefined}
                     onDelete={handleDeleteItem}
                   />
                 </Collapse>

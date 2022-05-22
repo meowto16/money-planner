@@ -65,11 +65,11 @@ const HorizontalSwipe: React.FC<HorizontalSwipeProps> = ({
       const isSwipeRight = diffX < 0
 
       if (isSwipeLeft) {
-        onSwipeLeft?.(e, diffX)
+        onSwipeLeft?.(e, Math.abs(diffX))
       }
 
       if (isSwipeRight) {
-        onSwipeRight?.(e, diffX)
+        onSwipeRight?.(e, Math.abs(diffX))
       }
     }
 

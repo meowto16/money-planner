@@ -10,13 +10,13 @@ export const MoneyItem = styled(Box)({
   willChange: 'transform',
 })
 
-export const MoneyItemInputs = styled(Box)({
+export const MoneyItemInputs = styled(Box)<{ $haveRange?: boolean }>(({ $haveRange }) => ({
   width: '100%',
   display: 'flex',
-  padding: '12px 16px 24px',
+  padding: $haveRange ? '12px 16px 24px' : '12px 16px',
   justifyContent: 'space-between',
   position: 'relative',
-})
+}))
 
 export const MoneyItemRange = styled(Box)({
   position: 'absolute',
@@ -75,7 +75,7 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
 export const MoneyItemDeleteAction = styled(Box)({
   position: 'absolute',
   width: '70px',
-  height: '65px',
+  height: '100%',
   right: '-70px',
   top: '0',
   willChange: 'opacity',

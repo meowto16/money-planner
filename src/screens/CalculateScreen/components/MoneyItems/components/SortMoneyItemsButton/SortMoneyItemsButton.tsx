@@ -9,7 +9,7 @@ import SortIcon from '@mui/icons-material/Sort'
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha'
 import CurrencyRubleIcon from '@mui/icons-material/CurrencyRuble'
 
-import { moneyActions, moneySelectors } from '../../../../store/money.slice'
+import { moneyActions, moneySelectors } from '../../../../../../store/money.slice'
 
 const SortMoneyItemsButton: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
