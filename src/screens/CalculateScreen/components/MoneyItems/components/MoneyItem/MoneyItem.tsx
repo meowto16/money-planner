@@ -2,11 +2,11 @@ import React, { memo } from 'react'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 
-import { CostsItem } from '../../../../store/money.slice'
-import numberFormat, { numberUnformat } from '../../../../utils/numberFormat'
+import { CostsItem } from '../../../../../../store/money.slice'
+import numberFormat, { numberUnformat } from '../../../../../../utils/numberFormat'
 
 import * as S from './MoneyItem.styled'
-import HorizontalSwipe, { SwipeHandler } from '../../../Util/HorizontalSwipe'
+import HorizontalSwipe, { SwipeHandler } from '../../../../../../components/HorizontalSwipe'
 import { SWIPE_LEFT_MIN_DISTANCE, SWIPE_RIGHT_MIN_DISTANCE } from './constants'
 
 export interface MoneyItemProps {

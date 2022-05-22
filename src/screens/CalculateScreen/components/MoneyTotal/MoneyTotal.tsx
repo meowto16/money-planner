@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import EditIcon from '@mui/icons-material/Edit'
 import EditOffIcon from '@mui/icons-material/EditOff'
 
-import { moneySelectors, moneyActions } from '../../store/money.slice'
-import numberFormat, { numberUnformat } from '../../utils/numberFormat'
-import { MAX_INPUT_MONEY_LENGTH } from '../../config'
+import { moneySelectors, moneyActions } from '../../../../store/money.slice'
+import numberFormat, { numberUnformat } from '../../../../utils/numberFormat'
+import { MAX_INPUT_MONEY_LENGTH } from '../../../../config'
 
 const MoneyTotal = () => {
   const [isTotalMoneyEditable, setIsTotalMoneyEditable] = useState(false)

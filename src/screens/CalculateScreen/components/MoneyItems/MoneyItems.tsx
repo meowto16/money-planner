@@ -10,9 +10,9 @@ import {
 import AddMoneyItem from './components/AddMoneyItem/AddMoneyItem'
 import MoneyItem from './components/MoneyItem/MoneyItem'
 
-import { MAX_INPUT_MONEY_LENGTH } from '../../config'
-import { CostsItemId, Money, moneyActions, moneySelectors } from '../../store/money.slice'
-import { StoreState } from '../../store/store'
+import { MAX_INPUT_MONEY_LENGTH } from '../../../../config'
+import { CostsItemId, Money, moneyActions, moneySelectors } from '../../../../store/money.slice'
+import { StoreState } from '../../../../store/store'
 
 import * as S from './MoneyItems.styled'
 import { getPercentStep } from './constants'
