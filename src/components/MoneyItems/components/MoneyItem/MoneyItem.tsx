@@ -105,7 +105,9 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
                 step={0.5}
                 min={0}
                 max={100}
+                onTouchStart={e => e.stopPropagation()}
                 onTouchMove={e => e.stopPropagation()}
+                onTouchEnd={e => e.stopPropagation()}
                 onChange={e => onChangePercent({ id, amount, percent: +e.target.value })}
                 data-percent="0.5%"
               />

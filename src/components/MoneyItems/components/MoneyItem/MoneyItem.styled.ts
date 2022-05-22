@@ -37,29 +37,32 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
   borderBottomRightRadius: '0px',
   borderTopLeftRadius: '0px',
   borderTopRightRadius: '0px',
+  pointerEvents: 'none',
 
   '&::-webkit-slider-thumb': {
     WebkitAppearance: 'none',
     appearance: 'none',
-    width: '20px',
-    height: '20px',
+    width: '24px',
+    height: '24px',
     transition: 'width 0.15s ease-in, height 0.15s ease-in',
     borderRadius: '50%',
     background: theme.palette.primary.light,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    pointerEvents: 'auto',
   },
   '&::-moz-range-thumb': {
-    width: '20px',
-    height: '20px',
+    width: '24px',
+    height: '24px',
     borderRadius: '50%',
     transition: 'width 0.15s ease-in, height 0.15s ease-in',
     background: theme.palette.primary.light,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    pointerEvents: 'auto',
   },
 
   '&:active::-webkit-slider-thumb': {
-    width: '26px',
-    height: '26px'
+    width: '32px',
+    height: '32px'
   }
 }))
 
