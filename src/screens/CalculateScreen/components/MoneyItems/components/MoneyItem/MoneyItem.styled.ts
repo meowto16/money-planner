@@ -40,10 +40,11 @@ export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
   pointerEvents: 'none',
 
   '&::-webkit-slider-thumb': {
+    appearance: 'none',
+    WebkitAppearance: 'none',
     boxSizing: 'content-box',
     backgroundClip: 'padding-box!important',
-    WebkitAppearance: 'none',
-    appearance: 'none',
+    boxShadow: 'none',
     width: '20px',
     height: '20px',
     border: '8px solid transparent',
