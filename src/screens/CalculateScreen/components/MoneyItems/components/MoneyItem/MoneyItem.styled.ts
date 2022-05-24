@@ -82,6 +82,49 @@ export const MoneyItemDeleteAction = styled(Box)({
   willChange: 'opacity',
 })
 
+export const MoneyItemDelete = styled(Box)(({ theme }) => ({
+  height: '100%',
+  width: '100%',
+  backgroundColor: theme.palette.error.main,
+  borderTopRightRadius: '4px',
+  borderBottomRightRadius: '4px',
+}))
+
+export const MoneyItemDeleteButton = styled(IconButton)({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#f6f6f6'
+})
+
+export const MoneyItemAddCategoryAction = styled(Box)({
+  position: 'absolute',
+  width: '70px',
+  height: '100%',
+  left: '-70px',
+  top: '0',
+  willChange: 'opacity',
+})
+
+export const MoneyItemAddCategory = styled(Box)(({ theme }) => ({
+  height: '100%',
+  width: '100%',
+  backgroundColor: theme.palette.primary.main,
+  borderTopLeftRadius: '4px',
+  borderBottomLeftRadius: '4px',
+}))
+
+export const MoneyItemAddCategoryButton = styled(IconButton)({
+  height: '100%',
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: '#f6f6f6'
+})
+
 export const MoneyItemName = styled(TextField)({
   '&': {
     width: 'auto',
@@ -132,21 +175,4 @@ export const MoneyItemCost = styled(TextField)({
   '& .MuiInputAdornment-root': {
 
   },
-})
-
-export const MoneyItemDelete = styled(Box)(({ theme }) => ({
-  height: '100%',
-  width: '100%',
-  backgroundColor: theme.palette.error.main,
-  borderTopRightRadius: '4px',
-  borderBottomRightRadius: '4px',
-}))
-
-export const MoneyItemDeleteButton = styled(IconButton)({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#f6f6f6'
 })

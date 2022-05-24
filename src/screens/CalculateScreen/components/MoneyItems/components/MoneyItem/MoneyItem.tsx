@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 
 import DeleteIcon from '@mui/icons-material/Delete'
+import BookmarksIcon from '@mui/icons-material/Bookmarks'
 
 import { CostsItem } from '../../../../../../store/money.slice'
 import numberFormat, { numberUnformat } from '../../../../../../utils/numberFormat'
@@ -60,6 +61,16 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
             transition: !isSwiping ? '0.15s ease-in transform' : undefined,
           }}
         >
+          <S.MoneyItemAddCategoryAction style={{
+            opacity: `${-swipeDistance / SWIPE_LEFT_MIN_DISTANCE}`,
+            transition: !isSwiping ? '0.15s ease-in opacity' : undefined,
+          }}>
+            <S.MoneyItemAddCategory>
+              <S.MoneyItemAddCategoryButton>
+                <BookmarksIcon />
+              </S.MoneyItemAddCategoryButton>
+            </S.MoneyItemAddCategory>
+          </S.MoneyItemAddCategoryAction>
           <S.MoneyItemInputs $haveRange={haveRange}>
             <S.MoneyItemName
               onChange={(e) => {
@@ -118,7 +129,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
             transition: !isSwiping ? '0.15s ease-in opacity' : undefined,
           }}>
             <S.MoneyItemDelete>
-              <S.MoneyItemDeleteButton onClick={() => onDelete(id)}>
+              <S.MoneyItemDeleteButton>
                 <DeleteIcon />
               </S.MoneyItemDeleteButton>
             </S.MoneyItemDelete>
