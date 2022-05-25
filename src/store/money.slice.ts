@@ -8,11 +8,20 @@ export enum EAppMoneyMode {
 
 export type Money = number
 
+export type CategoryId = ReturnType<typeof nanoid>
+export type CategoryItem = {
+  id: CategoryId
+  name: string
+}
+
+export type CategoryItemPayload = Omit<CategoryItem, 'id'>
+
 export type CostsItemId = ReturnType<typeof nanoid>
 export type CostsItem = {
     id: CostsItemId
     name: string
     amount: Money
+    categoryId: CategoryId
 }
 
 export type CostsItemPayload = Omit<CostsItem, 'id'>
@@ -21,12 +30,14 @@ export interface MoneyState {
     total: Money | null
     costs: CostsItem[]
     sortedBy: 'BY_NAME_ASC' | 'BY_NAME_DESC' | 'BY_AMOUNT_ASC' | 'BY_AMOUNT_DESC' | null
+    categories: Record<CategoryId, CategoryItem>
 }
 
 const initialState = {
   total: null,
   costs: [],
   sortedBy: null,
+  categories: {},
 } as MoneyState
 
 const money = createSlice({
@@ -43,6 +54,18 @@ const money = createSlice({
     },
     resetTotal: (state) => {
       state.total = null
+    },
+    createCategory: (state, action: PayloadAction<CategoryItemPayload>) => {
+      const categoriesCount = Object.keys(state.categories).length
+      const categoryId = nanoid()
+
+      state.categories[categoryId] = {
+        id: nanoid(),
+        name: action.payload.name || `Категория №${categoriesCount + 1}`
+      }
+    },
+    removeCategory: (state, action: PayloadAction<CategoryId>) => {
+      delete state.categories[action.payload]
     },
     addCostsItem: (state) => {
       state.costs.push({
@@ -69,6 +92,16 @@ const money = createSlice({
       if (typeof action.payload.amount === 'number') {
         item.amount = action.payload.amount
       }
+    },
+    linkCostsItemToCategory: (state, action: PayloadAction<{ costsItemId: CostsItemId; categoryId: CategoryId }>) => {
+      const category = state.categories[action.payload.categoryId]
+      const costsItem = state.costs.find((cost) => cost.id === action.payload.costsItemId)
+
+      if (!category || !costsItem) {
+        return state
+      }
+
+      costsItem.categoryId = action.payload.categoryId
     },
     sortItems: (state, action: PayloadAction<'byName' | 'byAmount'>) => {
       const type = action.payload
@@ -109,7 +142,15 @@ const money = createSlice({
 
 const getRoot = createSelector((state: StoreState) => state.money, root => root)
 const getTotalMoney = createSelector(getRoot, root => root.total)
-const getCosts = createSelector(getRoot, root => root.costs)
+const getCategories = createSelector(getRoot, root => root.categories)
+const getCosts = createSelector(getRoot, root => {
+  return root.costs.map(cost => ({
+    id: cost.id,
+    name: cost.name,
+    amount: cost.amount,
+    category: root?.categories?.[cost.categoryId] || null
+  }))
+})
 const getCostsSum = createSelector(getCosts, (costs) => costs.reduce((acc, cost) => acc += cost.amount, 0))
 const getTotalMoneyCalculated = createSelector(getTotalMoney, getCostsSum, (total, costsSum) => (total || 0) - costsSum)
 const getAppMode = createSelector(getTotalMoney, (total): EAppMoneyMode => total === null
