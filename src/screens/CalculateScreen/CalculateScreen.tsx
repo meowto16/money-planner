@@ -1,13 +1,15 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { AppBar, Box, IconButton, Container, Stack, Typography, styled } from '@mui/material'
+import RestartAltIcon from '@mui/icons-material/RestartAlt'
 
 import { moneyActions, moneySelectors } from '../../store/money.slice'
 
-import { AppBar, Box, IconButton, Container, Stack, Typography, styled } from '@mui/material'
 import MoneyTotal from './components/MoneyTotal/MoneyTotal'
 import MoneyItems from './components/MoneyItems/MoneyItems'
 import SortMoneyItemsButton from './components/MoneyItems/components/SortMoneyItemsButton/SortMoneyItemsButton'
-import RestartAltIcon from '@mui/icons-material/RestartAlt'
+import CategoryDialog from './components/CategoryDialog/CategoryDialog'
+
 import useConfirmDialog from '../../components/ConfirmDialog/useConfirmDialog'
 
 const ResetIconButton = styled(IconButton)({
@@ -64,6 +66,7 @@ const CalculateScreen = () => {
         </Stack>
       </Container>
       {resetConfirmDialog}
+      <CategoryDialog />
     </Box>
   )
 }
