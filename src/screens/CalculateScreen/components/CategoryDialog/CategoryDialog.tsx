@@ -1,13 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { Dialog, DialogContent, DialogActions, DialogTitle, Button, DialogContentText } from '@mui/material'
+
+import { CategoryItem, moneyActions, moneySelectors } from '../../../../store/money.slice'
 
 import * as S from './CategoryDialog.styled'
 
 const CategoryDialog: React.FC = () => {
+  const dispatch = useDispatch()
+  const [categoryName, setCategoryName] = useState('')
+
+  const categories = useSelector(moneySelectors.getCategoriesArray)
+
+  const resetForm = () => {
+    setCategoryName('')
+  }
+  
   const handleSubmit: React.FormEventHandler = (event) => {
     event.preventDefault()
         
-    console.log('submit')
+    if (!categoryName) {
+      return
+    }
+
+    dispatch(moneyActions.createCategory({
+      name: categoryName
+    }))
+
+    resetForm()
+  }
+
+  const handleCategoryClick = (category: CategoryItem) => {
+    console.log(category)
   }
 
   return (
@@ -18,14 +43,31 @@ const CategoryDialog: React.FC = () => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Привяжите расход к категории, чтобы иметь возможность фильтровать/сортировать по категории, либо же видеть
-            сумму расходов
+            Создайте категорию, либо привяжите существующую
           </DialogContentText>
-          <S.InputsContainer>
-            <S.InputContainer>
-              <S.Input label="Название категории" />
-            </S.InputContainer>
-          </S.InputsContainer>
+          <S.LinkContainer>
+            <S.LinkTitle>Привязка категории</S.LinkTitle>
+            <S.Categories>
+              {categories.map((category) => (
+                <S.CategoryItem
+                  key={category.id}
+                  variant="outlined"
+                  onClick={() => handleCategoryClick(category)}>{category.name}</S.CategoryItem>
+              ))}
+            </S.Categories>
+          </S.LinkContainer>
+          <S.CreateContainer>
+            <S.CreateTitle>Создание категории</S.CreateTitle>
+            <S.InputsContainer>
+              <S.InputContainer>
+                <S.Input
+                  label="Название"
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                />
+              </S.InputContainer>
+            </S.InputsContainer>
+          </S.CreateContainer>
         </DialogContent>
         <DialogActions>
           <Button color="success" variant="contained" type="submit">Сохранить</Button>

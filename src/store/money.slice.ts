@@ -56,8 +56,12 @@ const money = createSlice({
       state.total = null
     },
     createCategory: (state, action: PayloadAction<CategoryItemPayload>) => {
-      const categoriesCount = Object.keys(state.categories).length
+      const categoriesCount = Object.keys(state.categories || {}).length
       const categoryId = nanoid()
+
+      if (!state.categories) {
+        state.categories = {}
+      }
 
       state.categories[categoryId] = {
         id: nanoid(),
@@ -142,7 +146,8 @@ const money = createSlice({
 
 const getRoot = createSelector((state: StoreState) => state.money, root => root)
 const getTotalMoney = createSelector(getRoot, root => root.total)
-const getCategories = createSelector(getRoot, root => root.categories)
+const getCategories = createSelector(getRoot, root => root.categories || {})
+const getCategoriesArray = createSelector(getCategories, categories => Object.values(categories))
 const getCosts = createSelector(getRoot, root => {
   return root.costs.map(cost => ({
     id: cost.id,
@@ -170,6 +175,8 @@ const moneySelectors = {
   getCosts,
   getCostsSum,
   getTotalMoneyCalculated,
+  getCategories,
+  getCategoriesArray,
   getAppMode,
   getSortedBy,
   isCostsEmpty
