@@ -14,65 +14,23 @@ export const MoneyItem = styled(Box)<{ $haveCategory?: boolean }>(({ theme, $hav
 export const MoneyItemInputs = styled(Box)<{ $haveRange?: boolean }>(({ $haveRange }) => ({
   width: '100%',
   display: 'flex',
-  padding: $haveRange ? '12px 16px 24px' : '12px 16px',
+  padding: $haveRange ? '12px 16px 14px' : '12px 16px',
   justifyContent: 'space-between',
   position: 'relative',
 }))
 
 export const MoneyItemRange = styled(Box)({
   position: 'absolute',
-  bottom: '-2px',
-  left: '-2px',
+  bottom: '-7px',
+  left: '0px',
   width: '100%',
-})
 
-export const MoneyItemRangeInput = styled('input')(({ theme }) => ({
-  width: '100%',
-  display: 'block',
-  WebkitAppearance: 'none',
-  appearance: 'none',
-  outline: 'none',
-  background: '#eee',
-  height: '16px',
-  borderBottomLeftRadius: '3px',
-  borderBottomRightRadius: '0px',
-  borderTopLeftRadius: '0px',
-  borderTopRightRadius: '0px',
-  pointerEvents: 'none',
-
-  '&::-webkit-slider-thumb': {
-    appearance: 'none',
-    WebkitAppearance: 'none',
-    boxSizing: 'content-box',
-    backgroundClip: 'padding-box!important',
-    boxShadow: 'none',
-    width: '20px',
-    height: '20px',
-    border: '8px solid transparent',
-    transition: 'width 0.15s ease-in, height 0.15s ease-in',
-    borderRadius: '50%',
-    background: theme.palette.primary.light,
-    cursor: 'pointer',
-    pointerEvents: 'auto',
-  },
-  '&::-moz-range-thumb': {
-    boxSizing: 'content-box',
-    backgroundClip: 'padding-box!important',
-    width: '20px',
-    height: '20px',
-    border: '8px solid transparent',
-    borderRadius: '50%',
-    transition: 'width 0.15s ease-in, height 0.15s ease-in',
-    background: theme.palette.primary.light,
-    cursor: 'pointer',
-    pointerEvents: 'auto',
-  },
-
-  '&:active::-webkit-slider-thumb': {
-    width: '24px',
-    height: '24px',
+  '& > .MuiSlider-root': {
+    padding: '0',
+    borderTopLeftRadius: '0',
+    borderTopRightRadius: '0',
   }
-}))
+})
 
 export const MoneyItemDeleteAction = styled(Box)({
   position: 'absolute',

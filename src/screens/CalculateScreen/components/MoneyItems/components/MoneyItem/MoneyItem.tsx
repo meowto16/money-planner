@@ -9,6 +9,7 @@ import numberFormat, { numberUnformat } from '../../../../../../utils/numberForm
 import * as S from './MoneyItem.styled'
 import HorizontalSwipe, { SwipeHandler } from '../../../../../../components/HorizontalSwipe'
 import { SWIPE_LEFT_MIN_DISTANCE, SWIPE_RIGHT_MIN_DISTANCE } from './constants'
+import { Slider } from '@mui/material'
 
 export interface MoneyItemProps {
     placeholder: string
@@ -115,17 +116,19 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
               fullWidth
             />
             {haveRange && (
-              <S.MoneyItemRange>
-                <S.MoneyItemRangeInput
-                  type="range"
+              <S.MoneyItemRange
+                onTouchStart={e => e.stopPropagation()}
+              >
+                <Slider
                   value={percent}
                   step={0.5}
                   min={0}
                   max={100}
-                  onTouchStart={e => e.stopPropagation()}
-                  onTouchMove={e => e.stopPropagation()}
-                  onTouchEnd={e => e.stopPropagation()}
-                  onChange={e => onChangePercent!({ id, amount, percent: +e.target.value })}
+                  onChange={(e, value) => onChangePercent!({
+                    id,
+                    amount,
+                    percent: value as number
+                  })}
                   data-percent="0.5%"
                 />
               </S.MoneyItemRange>
