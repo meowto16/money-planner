@@ -1,6 +1,8 @@
 import { createSlice, createSelector, PayloadAction, nanoid } from '@reduxjs/toolkit'
 import { StoreState } from './store'
 
+export const DEFAULT_CATEGORY_ID = 'DEFAULT_CATEGORY'
+
 export enum EAppMoneyMode {
   SALARY_MODE = 'SALARY_MODE',
   BUDGET_MODE = 'BUDGET_MODE'
@@ -21,7 +23,7 @@ export type CostsItem = {
     id: CostsItemId
     name: string
     amount: Money
-    categoryId: CategoryId
+    categoryId: CategoryId | null
 }
 
 export type CostsItemPayload = Omit<CostsItem, 'id'>
@@ -55,6 +57,31 @@ const money = createSlice({
     resetTotal: (state) => {
       state.total = null
     },
+    addDefaultCategoryToCost: (state, action: PayloadAction<CostsItemId>) => {
+      if (!state.categories[DEFAULT_CATEGORY_ID]) {
+        state.categories[DEFAULT_CATEGORY_ID] = {
+          id: DEFAULT_CATEGORY_ID,
+          name: 'Стандартная категория',
+        }
+      }
+
+      const cost = state.costs.find(cost => cost.id === action.payload)
+
+      if (!cost) {
+        return state
+      }
+
+      cost.categoryId = DEFAULT_CATEGORY_ID
+    },
+    removeCategoriesFromAllCosts: (state) => {
+      return {
+        ...state,
+        costs: state.costs.map((cost) => ({
+          ...cost,
+          categoryId: null
+        }))
+      }
+    },
     createCategory: (state, action: PayloadAction<CategoryItemPayload>) => {
       const categoriesCount = Object.keys(state.categories || {}).length
       const categoryId = nanoid()
@@ -65,7 +92,7 @@ const money = createSlice({
 
       state.categories[categoryId] = {
         id: nanoid(),
-        name: action.payload.name || `Категория №${categoriesCount + 1}`
+        name: action.payload.name || `Категория №${categoriesCount + 1}`,
       }
     },
     removeCategory: (state, action: PayloadAction<CategoryId>) => {
@@ -75,7 +102,8 @@ const money = createSlice({
       state.costs.push({
         id: nanoid(),
         name: '',
-        amount: 0
+        amount: 0,
+        categoryId: null,
       } as CostsItem)
     },
     removeCostsItem: (state, action: PayloadAction<CostsItemId>) => {
@@ -87,7 +115,7 @@ const money = createSlice({
     },
     changeCostsItem: (state, action: PayloadAction<Partial<CostsItemPayload> & { id: CostsItemId }>) => {
       const item = state.costs.find(cost => cost.id === action.payload.id)
-      if (!item) return
+      if (!item) return state
 
       if (typeof action.payload.name === 'string') {
         item.name = action.payload.name
@@ -95,6 +123,10 @@ const money = createSlice({
 
       if (typeof action.payload.amount === 'number') {
         item.amount = action.payload.amount
+      }
+
+      if (typeof action.payload.categoryId === 'string' || action.payload.categoryId === null) {
+        item.categoryId = action.payload.categoryId
       }
     },
     linkCostsItemToCategory: (state, action: PayloadAction<{ costsItemId: CostsItemId; categoryId: CategoryId }>) => {
@@ -153,10 +185,17 @@ const getCosts = createSelector(getRoot, root => {
     id: cost.id,
     name: cost.name,
     amount: cost.amount,
-    category: root?.categories?.[cost.categoryId] || null
+    category: cost.categoryId ? root?.categories[cost.categoryId] : null,
   }))
 })
 const getCostsSum = createSelector(getCosts, (costs) => costs.reduce((acc, cost) => acc += cost.amount, 0))
+const getCostsSumByDefaultCategory = createSelector(getCosts, (costs) => costs.reduce((acc, cost) => {
+  if (cost.category?.id !== DEFAULT_CATEGORY_ID) {
+    return acc
+  }
+
+  return acc + cost.amount
+}, 0))
 const getTotalMoneyCalculated = createSelector(getTotalMoney, getCostsSum, (total, costsSum) => (total || 0) - costsSum)
 const getAppMode = createSelector(getTotalMoney, (total): EAppMoneyMode => total === null
   ? EAppMoneyMode.BUDGET_MODE 
@@ -164,6 +203,7 @@ const getAppMode = createSelector(getTotalMoney, (total): EAppMoneyMode => total
 )
 const getSortedBy = createSelector(getRoot, root => root.sortedBy)
 const isCostsEmpty = createSelector(getCosts, costs => costs.length === 0)
+const hasCostWithDefaultCategory = createSelector(getCosts, costs => costs.some(cost => cost.category?.id === DEFAULT_CATEGORY_ID))
 
 export default money
 
@@ -174,12 +214,14 @@ const moneySelectors = {
   getTotalMoney,
   getCosts,
   getCostsSum,
+  getCostsSumByDefaultCategory,
   getTotalMoneyCalculated,
   getCategories,
   getCategoriesArray,
   getAppMode,
   getSortedBy,
-  isCostsEmpty
+  isCostsEmpty,
+  hasCostWithDefaultCategory,
 }
 
 export {

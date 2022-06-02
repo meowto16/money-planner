@@ -6,12 +6,20 @@ import { Box, Collapse, Stack, Typography } from '@mui/material'
 import AddMoneyItem from './components/AddMoneyItem/AddMoneyItem'
 import MoneyItem from './components/MoneyItem/MoneyItem'
 
+import { getPercentStep } from './constants'
+
 import { MAX_INPUT_MONEY_LENGTH } from '../../../../config'
-import { CostsItemId, EAppMoneyMode, Money, moneyActions, moneySelectors } from '../../../../store/money.slice'
+import {
+  CostsItemId,
+  DEFAULT_CATEGORY_ID,
+  EAppMoneyMode,
+  Money,
+  moneyActions,
+  moneySelectors
+} from '../../../../store/money.slice'
 import { StoreState } from '../../../../store/store'
 
 import * as S from './MoneyItems.styled'
-import { getPercentStep } from './constants'
 
 const MoneyItems = () => {
   const dispatch = useDispatch()
@@ -62,6 +70,13 @@ const MoneyItems = () => {
     dispatch(moneyActions.addCostsItem())
   }
 
+  const handleToggleCategory = (id: CostsItemId, haveCategory: boolean) => {
+    dispatch(
+      haveCategory
+        ? moneyActions.changeCostsItem({ id, categoryId: null })
+        : moneyActions.addDefaultCategoryToCost(id)
+    )
+  }
 
   return (
     <S.MoneyItems>
@@ -81,6 +96,8 @@ const MoneyItems = () => {
                       ? (cost.amount / totalMoney * 100)
                       : (cost.amount / (costsSum || 1) * 100)
                     }
+                    haveCategory={cost.category?.id === DEFAULT_CATEGORY_ID}
+                    onToggleCategory={handleToggleCategory}
                     onChangeName={handleChangeItemName}
                     onChangeAmount={handleChangeItemAmount}
                     onChangePercent={appMode === EAppMoneyMode.SALARY_MODE ? handleChangePercent : undefined}

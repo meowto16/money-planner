@@ -16,6 +16,8 @@ export interface MoneyItemProps {
     name: CostsItem['name']
     amount: CostsItem['amount']
     percent: number
+    haveCategory: boolean
+    onToggleCategory: (id: CostsItem['id'], haveCategory: boolean) => void
     onChangeName: (props: { id: CostsItem['id'], name: CostsItem['name'] }) => void
     onChangeAmount: (props: { id: CostsItem['id'], amount: CostsItem['amount'] }) => void
     onChangePercent?: (props: { id: CostsItem['id'], amount: CostsItem['amount'], percent: number }) => void
@@ -28,6 +30,8 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
   amount,
   percent = 0,
   placeholder,
+  haveCategory,
+  onToggleCategory,
   onChangeName,
   onChangeAmount,
   onChangePercent,
@@ -35,7 +39,6 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
 }) => {
   const handleSwipeLeft: SwipeHandler = (event, diff) => {
     const isSwipedEnough = diff >= SWIPE_LEFT_MIN_DISTANCE
-    console.log('swipe left', isSwipedEnough, diff)
 
     if (isSwipedEnough) {
       onDelete(id)
@@ -44,7 +47,10 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
 
   const handleSwipeRight: SwipeHandler = (event, diff) => {
     const isSwipedEnough = diff >= SWIPE_RIGHT_MIN_DISTANCE
-    console.log('swipe right', isSwipedEnough, diff)
+
+    if (isSwipedEnough) {
+      onToggleCategory(id, haveCategory)
+    }
   }
 
   const haveRange = Boolean(onChangePercent)
@@ -53,6 +59,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
     <HorizontalSwipe onSwipeLeft={handleSwipeLeft} onSwipeRight={handleSwipeRight}>
       {({ handleTouchStart, handleTouchMove, handleTouchEnd, isSwiping, swipeDistance }) => (
         <S.MoneyItem
+          $haveCategory={haveCategory}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

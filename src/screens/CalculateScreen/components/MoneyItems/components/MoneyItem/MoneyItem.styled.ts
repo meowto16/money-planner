@@ -1,6 +1,6 @@
 import { Box, TextField, IconButton, styled } from '@mui/material'
 
-export const MoneyItem = styled(Box)({
+export const MoneyItem = styled(Box)<{ $haveCategory?: boolean }>(({ theme, $haveCategory }) => ({
   width: '100%',
   display: 'flex',
   border: '1px solid #eee',
@@ -8,7 +8,8 @@ export const MoneyItem = styled(Box)({
   boxShadow: '4px 3px 5px 1px #f0eded',
   justifyContent: 'space-between',
   willChange: 'transform',
-})
+  borderLeft: $haveCategory ? `4px solid ${theme.palette.primary.main}` : '',
+}))
 
 export const MoneyItemInputs = styled(Box)<{ $haveRange?: boolean }>(({ $haveRange }) => ({
   width: '100%',

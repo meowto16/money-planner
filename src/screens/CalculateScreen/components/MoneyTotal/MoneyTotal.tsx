@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Stack, TextField } from '@mui/material'
+import { Alert, Button, Stack, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
@@ -23,9 +23,18 @@ const MoneyTotal = () => {
   const moneyTotalRef = useRef<HTMLInputElement>()
   const dispatch = useDispatch()
 
-  const { totalMoney, totalMoneyCalculated, moneySpent, appMode } = useSelector((state: StoreState) => ({
+  const {
+    totalMoney,
+    totalMoneyCalculated,
+    moneySpent,
+    appMode,
+    haveCostsSumByDefaultCategory,
+    costsSumByDefaultCategory 
+  } = useSelector((state: StoreState) => ({
     totalMoney: moneySelectors.getTotalMoney(state),
     totalMoneyCalculated: moneySelectors.getTotalMoneyCalculated(state),
+    haveCostsSumByDefaultCategory: moneySelectors.hasCostWithDefaultCategory(state),
+    costsSumByDefaultCategory: moneySelectors.getCostsSumByDefaultCategory(state),
     moneySpent: moneySelectors.getCostsSum(state),
     appMode: moneySelectors.getAppMode(state),
   }))
@@ -116,6 +125,24 @@ const MoneyTotal = () => {
             ? `${numberFormat.format(moneySpent)} руб.`
             : 'Не указано'}
         </Alert>
+        {haveCostsSumByDefaultCategory && (
+          <Alert 
+            severity="warning" 
+            icon={false} 
+            action={
+              <Button
+                onClick={() => dispatch(moneyActions.removeCategoriesFromAllCosts())}
+                color="inherit"
+                size="small">
+                Сбросить
+              </Button>
+            }
+          >
+              Сумма по категории: {typeof costsSumByDefaultCategory === 'number'
+              ? `${numberFormat.format(costsSumByDefaultCategory)} руб.`
+              : 'Не указано'}
+          </Alert>
+        )}
       </Stack>
     </S.MoneyTotalContainer>
   )
