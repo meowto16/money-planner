@@ -1,4 +1,4 @@
-const CACHE_NAME = 'money-planner-version-1.0.26'
+const CACHE_NAME = 'money-planner-version-1.0.27'
 
 const urlsToCache = [
   '/'

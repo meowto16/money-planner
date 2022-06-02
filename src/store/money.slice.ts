@@ -58,6 +58,10 @@ const money = createSlice({
       state.total = null
     },
     addDefaultCategoryToCost: (state, action: PayloadAction<CostsItemId>) => {
+      if (!state.categories) {
+        state.categories = {}
+      }
+
       if (!state.categories[DEFAULT_CATEGORY_ID]) {
         state.categories[DEFAULT_CATEGORY_ID] = {
           id: DEFAULT_CATEGORY_ID,
