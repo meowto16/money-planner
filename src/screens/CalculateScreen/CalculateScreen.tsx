@@ -8,7 +8,6 @@ import { moneyActions, moneySelectors } from '../../store/money.slice'
 import MoneyTotal from './components/MoneyTotal/MoneyTotal'
 import MoneyItems from './components/MoneyItems/MoneyItems'
 import SortMoneyItemsButton from './components/MoneyItems/components/SortMoneyItemsButton/SortMoneyItemsButton'
-import CategoryDialog from './components/CategoryDialog/CategoryDialog'
 
 import useConfirmDialog from '../../components/ConfirmDialog/useConfirmDialog'
 
@@ -66,7 +65,6 @@ const CalculateScreen = () => {
         </Stack>
       </Container>
       {resetConfirmDialog}
-      <CategoryDialog />
     </Box>
   )
 }
