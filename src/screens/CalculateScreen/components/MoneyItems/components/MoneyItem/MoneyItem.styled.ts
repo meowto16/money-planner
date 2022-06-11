@@ -8,7 +8,23 @@ export const MoneyItem = styled(Box)<{ $haveCategory?: boolean }>(({ theme, $hav
   boxShadow: '4px 3px 5px 1px #f0eded',
   justifyContent: 'space-between',
   willChange: 'transform',
-  borderLeft: $haveCategory ? `4px solid ${theme.palette.primary.main}` : '',
+
+  '&::before': {
+    content: '""',
+    position: 'absolute',
+    left: '0',
+    top: '0',
+    width: '4px',
+    height: '100%',
+    background: theme.palette.primary.main,
+    opacity: '0',
+    transition: '0.15s ease-in opacity',
+    borderBottomLeftRadius: '20px',
+
+    '&': $haveCategory && {
+      opacity: '1',
+    },
+  },
 }))
 
 export const MoneyItemInputs = styled(Box)<{ $haveRange?: boolean }>(({ $haveRange }) => ({
