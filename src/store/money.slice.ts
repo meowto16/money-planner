@@ -36,7 +36,7 @@ export interface MoneyState {
 }
 
 const initialState = {
-  total: null,
+  total: 0,
   costs: [],
   sortedBy: null,
   categories: {},

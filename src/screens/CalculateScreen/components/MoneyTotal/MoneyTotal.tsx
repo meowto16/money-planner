@@ -19,7 +19,7 @@ import {
 import * as S from './MoneyTotal.styled'
 
 const MoneyTotal = () => {
-  const [isTotalMoneyEditable, setIsTotalMoneyEditable] = useState(false)
+  const [isTotalMoneyEditable, setIsTotalMoneyEditable] = useState(true)
   const moneyTotalRef = useRef<HTMLInputElement>()
   const dispatch = useDispatch()
 
@@ -52,6 +52,7 @@ const MoneyTotal = () => {
   const handleSwipeLeftMoneyTotal: SwipeHandler = (e, diff) => {
     if (diff >= SWIPE_LEFT_MONEY_TOTAL_MIN_DISTANCE) {
       dispatch(moneyActions.resetTotal())
+      setIsTotalMoneyEditable(false)
     }
   }
 
