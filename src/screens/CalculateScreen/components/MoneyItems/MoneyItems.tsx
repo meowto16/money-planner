@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { TransitionGroup } from 'react-transition-group'
 import { Box, Collapse, Stack, Typography } from '@mui/material'
@@ -32,14 +32,14 @@ const MoneyItems = () => {
   }))
   const totalMoney = total || 1
 
-  const handleChangeItemName = ({ id, name }: { id: CostsItemId, name: string }) => {
+  const handleChangeItemName = useCallback(({ id, name }: { id: CostsItemId, name: string }) => {
     dispatch(moneyActions.changeCostsItem({
       id,
       name,
     }))
-  }
+  }, [])
 
-  const handleChangeItemAmount = ({ id, amount }: { id: CostsItemId, amount: Money }) => {
+  const handleChangeItemAmount = useCallback(({ id, amount }: { id: CostsItemId, amount: Money }) => {
     if (typeof amount !== 'number') return
     if (amount < 0) return
     if (amount.toString().length >= MAX_INPUT_MONEY_LENGTH) return
@@ -48,35 +48,37 @@ const MoneyItems = () => {
       id,
       amount,
     }))
-  }
+  }, [])
 
-  const handleChangePercent = ({ id, percent }: { id: CostsItemId, amount: Money, percent: number }) => {
-    const calculated = totalMoney * percent / 100
-    const step = getPercentStep(totalMoney)
+  const handleChangePercent = useCallback(({ id, percent }: { id: CostsItemId, amount: Money, percent: number }) => {
+    if (appMode === EAppMoneyMode.SALARY_MODE) {
+      const calculated = totalMoney * percent / 100
+      const step = getPercentStep(totalMoney)
 
-    dispatch(moneyActions.changeCostsItem({
-      id,
-      amount: Math.round(calculated / step) * step
-    }))
-  }
+      dispatch(moneyActions.changeCostsItem({
+        id,
+        amount: Math.round(calculated / step) * step
+      }))
+    }
+  }, [appMode])
 
-  const handleDeleteItem = (id: CostsItemId) => {
+  const handleDeleteItem = useCallback((id: CostsItemId) => {
     dispatch(moneyActions.removeCostsItem(id))
-  }
+  }, [])
 
-  const handleSubmit: React.FormEventHandler = (event) => {
-    event.preventDefault()
-
-    dispatch(moneyActions.addCostsItem())
-  }
-
-  const handleToggleCategory = (id: CostsItemId, haveCategory: boolean) => {
+  const handleToggleCategory = useCallback((id: CostsItemId, haveCategory: boolean) => {
     dispatch(
       haveCategory
         ? moneyActions.changeCostsItem({ id, categoryId: null })
         : moneyActions.addDefaultCategoryToCost(id)
     )
-  }
+  }, [])
+
+  const handleSubmit: React.FormEventHandler = useCallback((event) => {
+    event.preventDefault()
+
+    dispatch(moneyActions.addCostsItem())
+  }, [])
 
   return (
     <S.MoneyItems>
@@ -100,7 +102,7 @@ const MoneyItems = () => {
                     onToggleCategory={handleToggleCategory}
                     onChangeName={handleChangeItemName}
                     onChangeAmount={handleChangeItemAmount}
-                    onChangePercent={appMode === EAppMoneyMode.SALARY_MODE ? handleChangePercent : undefined}
+                    onChangePercent={handleChangePercent}
                     onDelete={handleDeleteItem}
                   />
                 </Collapse>

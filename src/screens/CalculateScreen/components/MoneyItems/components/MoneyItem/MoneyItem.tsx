@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { useCallback, memo } from 'react'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import BookmarksIcon from '@mui/icons-material/Bookmarks'
@@ -38,21 +38,21 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
   onChangePercent,
   onDelete
 }) => {
-  const handleSwipeLeft: SwipeHandler = (event, diff) => {
+  const handleSwipeLeft: SwipeHandler = useCallback((event, diff) => {
     const isSwipedEnough = diff >= SWIPE_LEFT_MIN_DISTANCE
 
     if (isSwipedEnough) {
       onDelete(id)
     }
-  }
+  }, [])
 
-  const handleSwipeRight: SwipeHandler = (event, diff) => {
+  const handleSwipeRight: SwipeHandler = useCallback((event, diff) => {
     const isSwipedEnough = diff >= SWIPE_RIGHT_MIN_DISTANCE
 
     if (isSwipedEnough) {
       onToggleCategory(id, haveCategory)
     }
-  }
+  }, [])
 
   const haveRange = Boolean(onChangePercent)
 
