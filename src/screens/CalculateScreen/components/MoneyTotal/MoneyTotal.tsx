@@ -6,7 +6,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { EAppMoneyMode, moneyActions, moneySelectors } from '../../../../store/money.slice'
-import numberFormat, { numberUnformat } from '../../../../utils/numberFormat'
+import { numberFormat, numberUnformat } from '../../../../utils/numberFormat'
 import { MAX_INPUT_MONEY_LENGTH } from '../../../../config'
 import { StoreState } from '../../../../store/store'
 import HorizontalSwipe, { SwipeHandler } from '../../../../components/HorizontalSwipe/HorizontalSwipe'
@@ -69,10 +69,10 @@ const MoneyTotal = () => {
   }, [isTotalMoneyEditable])
 
   const moneyTotalValue = isTotalMoneyEditable
-    ? numberFormat.format(totalMoney || 0)
+    ? numberFormat(totalMoney || 0)
     : appMode === EAppMoneyMode.BUDGET_MODE 
       ? 'Не установлено'
-      : numberFormat.format(totalMoney || 0) + ' руб.'
+      : numberFormat(totalMoney || 0) + ' руб.'
 
   return (
     <S.MoneyTotalContainer>
@@ -117,13 +117,13 @@ const MoneyTotal = () => {
         {appMode === EAppMoneyMode.SALARY_MODE && (
           <Alert severity={totalMoneyCalculated < 0 ? 'error' : 'info'} icon={false}>
               Остается денег: {typeof totalMoneyCalculated === 'number'
-              ? `${numberFormat.format(totalMoneyCalculated)} руб.`
+              ? `${numberFormat(totalMoneyCalculated)} руб.`
               : 'Не указано'}
           </Alert>
         )}
         <Alert severity={appMode === EAppMoneyMode.SALARY_MODE && totalMoneyCalculated < 0 ? 'error' : 'info'} icon={false}>
           Потрачено денег: {typeof moneySpent === 'number'
-            ? `${numberFormat.format(moneySpent)} руб.`
+            ? `${numberFormat(moneySpent)} руб.`
             : 'Не указано'}
         </Alert>
         {haveCostsSumByDefaultCategory && (
@@ -140,7 +140,7 @@ const MoneyTotal = () => {
             }
           >
               Сумма по категории: {typeof costsSumByDefaultCategory === 'number'
-              ? `${numberFormat.format(costsSumByDefaultCategory)} руб.`
+              ? `${numberFormat(costsSumByDefaultCategory)} руб.`
               : 'Не указано'}
           </Alert>
         )}

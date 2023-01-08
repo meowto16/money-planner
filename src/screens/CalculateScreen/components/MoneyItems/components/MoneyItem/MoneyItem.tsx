@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import BookmarksIcon from '@mui/icons-material/Bookmarks'
 
 import { CostsItem } from '../../../../../../store/money.slice'
-import numberFormat, { numberUnformat } from '../../../../../../utils/numberFormat'
+import { numberFormat, numberUnformat } from '../../../../../../utils/numberFormat'
 
 import * as S from './MoneyItem.styled'
 import HorizontalSwipe, { SwipeHandler } from '../../../../../../components/HorizontalSwipe'
@@ -110,7 +110,7 @@ const MoneyItem: React.FC<MoneyItemProps> = ({
                   amount: numberUnformat(e.target.value)
                 })
               }}
-              value={amount === 0 ? '' : `${numberFormat.format(amount)}`}
+              value={amount === 0 ? '' : `${numberFormat(amount)}`}
               variant="standard"
               size="small"
               fullWidth

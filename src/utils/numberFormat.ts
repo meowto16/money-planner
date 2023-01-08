@@ -1,4 +1,7 @@
-const numberFormat = new Intl.NumberFormat('ru-RU')
-export const numberUnformat = (num: string): number => +num.replace(/[^0-9]/g, '')
+const numberFormat = (num: number): string => new Intl.NumberFormat('ru-RU').format(num)
+const numberUnformat = (num: string): number => +num.replace(/[^0-9]/g, '')
 
-export default numberFormat
+export {
+  numberFormat,
+  numberUnformat,
+}
